@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".Login">
+        <activity android:name=".DashBoard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

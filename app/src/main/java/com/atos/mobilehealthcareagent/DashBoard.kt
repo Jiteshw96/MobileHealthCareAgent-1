@@ -8,7 +8,7 @@ import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class Login : AppCompatActivity() {
+class DashBoard : AppCompatActivity() {
     var bottomNavigation: BottomNavigationView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

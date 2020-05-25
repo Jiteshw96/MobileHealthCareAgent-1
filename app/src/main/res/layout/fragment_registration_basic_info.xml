@@ -22,7 +22,7 @@
 
         <variable
             name="mainactivity"
-            type="com.atos.mobilehealthcareagent.Login" />
+            type="com.atos.mobilehealthcareagent.DashBoard" />
 
         <variable
             name="userInformationSavedIntoDataBase"

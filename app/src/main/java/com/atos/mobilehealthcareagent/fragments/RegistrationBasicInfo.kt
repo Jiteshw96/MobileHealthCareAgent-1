@@ -5,17 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.atos.mobilehealthcareagent.Login
+import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.contract.UserBasicDatabaseInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.databinding.FragmentRegistrationBasicInfoBinding
 import com.atos.mobilehealthcareagent.presenter.PersonalDataPresenter
-import kotlinx.android.synthetic.main.fragment_registration_basic_info.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -55,7 +53,7 @@ class RegistrationBasicInfo : Fragment(),
 
         binding?.user = mUser
 
-        binding?.mainactivity = activity as Login?
+        binding?.mainactivity = activity as DashBoard?
 
         binding?.userInformationSavedIntoDataBase = userInformationSavedIntoDataBase
 
