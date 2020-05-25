@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_health"
         android:icon="@drawable/ic_airplanemode_active_black_24dp"
-        android:title="Home" />
+        android:title="HEALTH" />
     <item
-        android:id="@+id/navigation_sms"
+        android:id="@+id/navigation_trends"
         android:icon="@drawable/ic_airplanemode_active_black_24dp"
-        android:title="SMS" />
+        android:title="TRENDS" />
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_airplanemode_active_black_24dp"
-        android:title="Notification" />
+        android:title="PROFILE" />
 </menu>
