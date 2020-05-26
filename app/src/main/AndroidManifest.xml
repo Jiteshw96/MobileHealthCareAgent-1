@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".DashBoard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistrationActivity"/>
-        <activity android:name=".DashBoard"/>
+        <activity android:name=".LoginActivity"/>
     </application>
 
 </manifest>
