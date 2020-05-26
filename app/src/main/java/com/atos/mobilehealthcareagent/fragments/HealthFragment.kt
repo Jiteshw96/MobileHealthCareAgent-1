@@ -33,9 +33,6 @@ class HealthFragment : Fragment() {
 
         initView()
 
-        DashBoardBuissnessLogic().getToday()
-        DashBoardBuissnessLogic().getYesterday()
-
         previos_button.setOnClickListener {
             today=false
             previos_button.isClickable=false

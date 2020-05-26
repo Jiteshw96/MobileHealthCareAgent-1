@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.atos.mobilehealthcareagent.database.AppDatabase
+import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
@@ -14,12 +16,14 @@ import java.lang.reflect.Field
 
 class DashBoard : AppCompatActivity() {
 
+    lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         openFragment(HealthFragment())
-
+        checkuserGoalCreatedOrNot()
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -55,6 +59,15 @@ class DashBoard : AppCompatActivity() {
         transaction.commit()
     }
 
+
+    fun checkuserGoalCreatedOrNot() {
+
+        db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase
+
+        Log.e("Database Created", "Ready to Read/Write")
+
+
+    }
 
 
 

@@ -32,4 +32,20 @@ class User : BaseObservable() {
     var height = 0
 
 
+    @ColumnInfo(name = "goal_steps")
+    var goal_steps = 7000L
+
+    @ColumnInfo(name = "goal_calorie")
+    var goal_calorie = 5600L
+
+    @ColumnInfo(name = "goal_distance")
+    var goal_distance = 5600L
+
+    @ColumnInfo(name = "goal_heartpoint")
+    var goal_heartpoint = 25
+
+    @ColumnInfo(name = "goal_moveminute")
+    var goal_moveminute = 140L
+
+
 }
