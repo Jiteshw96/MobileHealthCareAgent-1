@@ -42,8 +42,7 @@ class RegistrationBasicInfo : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
 
-        val view: View =
-            inflater.inflate(R.layout.fragment_registration_basic_info, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_registration_basic_info, container, false)
 
         binding = DataBindingUtil.bind(view)
 
