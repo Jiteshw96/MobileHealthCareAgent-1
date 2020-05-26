@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fragments.HealthFragment
+import com.atos.mobilehealthcareagent.fragments.ProfileFragment
+import com.atos.mobilehealthcareagent.fragments.TrendsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,13 +36,13 @@ class DashBoard : AppCompatActivity() {
                 }
                 R.id.navigation_trends-> {
                     // Respond to navigation item 2 click
-                    //   openFragment(HealthFragment())
+                       openFragment(TrendsFragment())
                     // open Profile Fragment
                     true
                 }
                 R.id.navigation_profile -> {
                     // Respond to navigation item 3 click
-                    //  openFragment(HealthFragment())
+                      openFragment(ProfileFragment())
                     // open navigation fragment
                     true
                 }
