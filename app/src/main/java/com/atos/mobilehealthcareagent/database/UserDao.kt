@@ -71,4 +71,14 @@ interface UserDao {
         endDate: Long?
     ): Integer?
 
+
+
+    @Insert
+    fun insertAllGoal(vararg mGoalData: Goal): LongArray?
+
+    @get:Query("SELECT * FROM user_goal")
+    val allGoal: List<Goal?>?
+
+
+
 }
