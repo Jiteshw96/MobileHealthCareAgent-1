@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:background="@color/cardview_light_background"
+            android:background="#DDA0DD"
 
             app:menu="@menu/bottom_navigation_menu" />
 

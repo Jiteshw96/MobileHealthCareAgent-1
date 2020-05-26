@@ -1,23 +1,19 @@
 package com.atos.mobilehealthcareagent.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
+import com.atos.mobilehealthcareagent.businesslogic.DashBoardBuissnessLogic
+import com.atos.mobilehealthcareagent.generated.callback.OnClickListener
+import kotlinx.android.synthetic.main.dashboard.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HealthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HealthFragment : Fragment() {
+
+    var today=true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +26,39 @@ class HealthFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.dashboard, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initView()
+
+        DashBoardBuissnessLogic().getToday()
+        DashBoardBuissnessLogic().getYesterday()
+
+        previos_button.setOnClickListener {
+            today=false
+            previos_button.isClickable=false
+            next_button.isClickable=true
+            txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getYesterday()
+            txt_today_tomorrow.text= getString(R.string.yesterday);
+        }
+        next_button.setOnClickListener {
+            today=true
+            previos_button.isClickable=true
+            next_button.isClickable=false
+            txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getToday()
+            txt_today_tomorrow.text= getString(R.string.today);
+        }
+
+    }
+
+
+    fun initView(){
+        previos_button.isClickable=true
+        next_button.isClickable=false
+        txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getToday()
+        txt_today_tomorrow.text= getString(R.string.today);
     }
 
 }

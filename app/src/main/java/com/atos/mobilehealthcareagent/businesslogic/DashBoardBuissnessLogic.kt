@@ -5,25 +5,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SecondActivityBusinessLogic {
+class DashBoardBuissnessLogic {
 
-    fun getTimeDifference(startTime:Long,endTime:Long):Boolean{
-
+    fun getTimeDifference(startTime: Long, endTime: Long): Boolean {
 
 
         val format = SimpleDateFormat("HH:mm:ss")
-        val date1 = format.parse( getDate(endTime,"HH:mm:ss"))
+        val date1 = format.parse(getDate(endTime, "HH:mm:ss"))
 
-        val date2 = format.parse( getDate(startTime,"HH:mm:ss"))
+        val date2 = format.parse(getDate(startTime, "HH:mm:ss"))
 
-        Log.v("",""+(date1.time-date2.time))
+        Log.v("", "" + (date1.time - date2.time))
 
-        var deltaTime=((startTime-endTime)/100.0)/60.0
+        var deltaTime = ((startTime - endTime) / 100.0) / 60.0
 
-        if(deltaTime>5){
+        if (deltaTime > 5) {
             return true
-        }
-        else{
+        } else {
             return false
         }
 
@@ -45,5 +43,20 @@ class SecondActivityBusinessLogic {
         val calendar: Calendar = Calendar.getInstance()
         calendar.setTimeInMillis(milliSeconds)
         return formatter.format(calendar.getTime())
+    }
+
+
+    fun getToday(): String {
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
+        val date = Date()
+        return formatter.format(date)
+    }
+
+    fun getYesterday(): String {
+
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
+        val date = Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000)
+
+        return formatter.format(date)
     }
 }

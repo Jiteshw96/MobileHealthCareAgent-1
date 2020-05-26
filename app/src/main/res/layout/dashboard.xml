@@ -38,6 +38,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:capitalize="words"
+                        android:id="@+id/txt_today_tomorrow"
                         android:text="Today">
 
                     </TextView>
@@ -59,6 +61,7 @@
                         android:paddingRight="50dp">
 
                         <ImageView
+                            android:id="@+id/previos_button"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
@@ -69,15 +72,16 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:capitalize="words"
+                            android:id="@+id/txt_today_tomorrow_date"
                             android:text="dfdsfdsfsdfsd sdfsdf " />
 
                         <ImageView
+                            android:id="@+id/next_button"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
-                            android:src="@drawable/ic_launcher_background"
-
-                            />
+                            android:src="@drawable/ic_launcher_background" />
 
 
                     </LinearLayout>
@@ -98,8 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="50dp"
-        >
+        android:paddingBottom="50dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
