@@ -4,19 +4,25 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.work.*
+import com.atos.mobilehealthcareagent.contract.UserFitnessDatabaseInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.atos.mobilehealthcareagent.fragments.ProfileFragment
+import com.atos.mobilehealthcareagent.fragments.SecondFragment
 import com.atos.mobilehealthcareagent.fragments.TrendsFragment
+import com.atos.mobilehealthcareagent.service.ServiceInputToDB
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.reflect.Field
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
-class DashBoard : AppCompatActivity() {
+class DashBoard : AppCompatActivity(){
 
     lateinit var db: AppDatabase
 
@@ -49,6 +55,7 @@ class DashBoard : AppCompatActivity() {
                 else -> false
             }
         }
+        initLongRunningService()
 
 
     }
@@ -69,6 +76,25 @@ class DashBoard : AppCompatActivity() {
         Log.e("Database Created", "Ready to Read/Write")
 
 
+    }
+
+     fun initLongRunningService() {
+        val data = Data.Builder()
+            .putString(SecondFragment.KEY_TASK_DESC, "Hey "+ Calendar.getInstance().getTime().toString())
+            .build()
+
+        val constraints = Constraints.Builder()
+
+            .build()
+
+        val request = PeriodicWorkRequestBuilder<ServiceInputToDB>(15, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .addTag("mobilehealthcareagent")
+            .build()
+
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork("MobileHealthCareAgent",
+            ExistingPeriodicWorkPolicy.KEEP,request);
     }
 
 
