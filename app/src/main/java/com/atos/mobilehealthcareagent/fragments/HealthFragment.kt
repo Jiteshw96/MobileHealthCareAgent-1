@@ -1,6 +1,7 @@
 package com.atos.mobilehealthcareagent.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,28 +35,40 @@ class HealthFragment : Fragment() {
         initView()
 
         previos_button.setOnClickListener {
-            today=false
-            previos_button.isClickable=false
-            next_button.isClickable=true
-            txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getYesterday()
-            txt_today_tomorrow.text= getString(R.string.yesterday);
+           yestardayIperation()
         }
         next_button.setOnClickListener {
-            today=true
-            previos_button.isClickable=true
-            next_button.isClickable=false
-            txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getToday()
-            txt_today_tomorrow.text= getString(R.string.today);
+          todayOperation()
         }
 
     }
 
 
     fun initView(){
+      todayOperation()
+    }
+
+
+    fun todayOperation(){
+        today=true
         previos_button.isClickable=true
         next_button.isClickable=false
         txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getToday()
         txt_today_tomorrow.text= getString(R.string.today);
+        fetchdata(DashBoardBuissnessLogic().todayStartTimeEndTime())
+    }
+    fun yestardayIperation(){
+        today=false
+        previos_button.isClickable=false
+        next_button.isClickable=true
+        txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getYesterday()
+        txt_today_tomorrow.text= getString(R.string.yesterday);
+        fetchdata(DashBoardBuissnessLogic().yesterdayStartTimeEndTime())
+    }
+
+    fun  fetchdata(list:ArrayList<Long>){
+
+        Log.v(""," "+list.get(1))
     }
 
 }
