@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_health"
-        android:icon="@drawable/ic_airplanemode_active_black_24dp"
+        android:icon="@drawable/ic_health"
         android:title="HEALTH" />
     <item
         android:id="@+id/navigation_trends"
-        android:icon="@drawable/ic_airplanemode_active_black_24dp"
+        android:icon="@drawable/ic_trends"
         android:title="TRENDS" />
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_airplanemode_active_black_24dp"
+        android:icon="@drawable/ic_profile"
         android:title="PROFILE" />
 </menu>
