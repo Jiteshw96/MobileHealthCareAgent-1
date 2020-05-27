@@ -10,6 +10,7 @@ import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.DashBoardBuissnessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.generated.callback.OnClickListener
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.dashboard.*
 
 
@@ -86,6 +87,12 @@ class HealthFragment : Fragment() {
         Log.v("totalDistance",""+totalDistance);
         Log.v("totalHeartoint",""+totalHeartoint);
 
+        steps_progress_bar.progress = 85f
+        calorie_progress_bar.progress= 65f
+        distance_progress_bar.progress = 45f
+        heart_progress_bar.progress = 25f
+
     }
+
 
 }
