@@ -24,12 +24,10 @@ import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import kotlinx.android.synthetic.main.activity_registration.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 const val TAG = "StepCounter"
 
@@ -79,11 +77,23 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener {
         val dob = findViewById<EditText>(R.id.dob)
         val spinner = findViewById<Spinner>(R.id.gender_spinner)
         // val  dataAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.gender,R.layout.custom_spinner)
-        val dataAdapter =
-            ArrayAdapter.createFromResource(this, R.array.gender, R.layout.custom_spinner)
+
+        var list = ArrayList<String>()
+        list.add("Male")
+        list.add("Female")
+        list.add("Other")
+        list.add("Select Gender")
+      //  val dataAdapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.custom_spinner)
+
+        val dataAdapter: ArrayAdapter<String?> = object :
+            ArrayAdapter<String?>(this, R.layout.custom_spinner, list as List<String?>) {
+            override fun getCount(): Int {
+                return  list.size-1// Truncate the list
+            }
+        }
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = dataAdapter
-        spinner.setSelection(dataAdapter.count - 1)
+        spinner.setSelection(list.size-1)
 
         checkuserGoalCreatedOrNot()
 
