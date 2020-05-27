@@ -1,5 +1,6 @@
 package com.atos.mobilehealthcareagent
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.reflect.Field
 
@@ -20,6 +22,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         checkuserGoalCreatedOrNot()
+
+        btn_continue.setOnClickListener{
+            var intent= Intent(this, RegistrationActivity::class.java)
+            startActivity(intent)
+
+        }
+
+        if(db?.userDao()?.all?.size!! >0){
+            var intent= Intent(this, DashBoard::class.java)
+            startActivity(intent)
+        }
 
     }
 

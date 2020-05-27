@@ -13,6 +13,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
+import com.atos.mobilehealthcareagent.database.AppDatabase
+import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fitnessharedpreferences.LastSyncSharedPreferences
 import com.atos.mobilehealthcareagent.fragments.DatePickerFragment
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
@@ -21,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
+import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +33,8 @@ import java.util.*
 
 const val TAG = "StepCounter"
 
-enum class TypeOfData{
-    Steps,Calorie,Heart
+enum class TypeOfData {
+    Steps, Calorie, Heart
 }
 
 
@@ -39,7 +42,8 @@ enum class FitActionRequestCode {
     SUBSCRIBE,
     READ_DATA
 }
-class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
+
+class RegistrationActivity : AppCompatActivity(), OnDateSetListener {
 
     private val fitnessOptions = FitnessOptions.builder()
         .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
@@ -56,8 +60,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
     var currentTime = Calendar.getInstance(timeZone).getTime();
     var date = sdf.format(currentTime)
     var mseconds = sdf.parse(date).time
-   lateinit var task:BackgroundTask
-
+    lateinit var task: BackgroundTask
 
 
     private val runningQOrLater =
@@ -65,8 +68,9 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
 
     private val dateFormat = DateFormat.getDateInstance()
     var steps = 0
-    private val readDataFitApi = ReadFitDataApi(this,fitnessOptions)
+    private val readDataFitApi = ReadFitDataApi(this, fitnessOptions)
 
+    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,12 +78,14 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
 
         val dob = findViewById<EditText>(R.id.dob)
         val spinner = findViewById<Spinner>(R.id.gender_spinner)
-       // val  dataAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.gender,R.layout.custom_spinner)
+        // val  dataAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.gender,R.layout.custom_spinner)
         val dataAdapter =
             ArrayAdapter.createFromResource(this, R.array.gender, R.layout.custom_spinner)
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = dataAdapter
         spinner.setSelection(dataAdapter.count - 1)
+
+        checkuserGoalCreatedOrNot()
 
         dob.setOnClickListener {
             val datePicker: DialogFragment = DatePickerFragment()
@@ -88,8 +94,68 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
 
         val done_btn = findViewById<Button>(R.id.done_btn)
         done_btn.setOnClickListener {
-          getPermission()
+
+            var user = User()
+            if (name_lbl.text.trim().length > 0) {
+                user.firstName = name_lbl.text.trim().toString()
+            }
+            else{
+                Toast.makeText(this,"Enter Name",Toast.LENGTH_LONG).show()
+            }
+
+            user.gender = gender_spinner.selectedItem.toString()
+
+            if (dob.text.trim().length > 0) {
+                user.dob = dob.text.trim().toString()
+            }
+            else{
+                Toast.makeText(this,"Select date of birth",Toast.LENGTH_LONG).show()
+            }
+            if (height.text.trim().length > 0) {
+                user.height = height.text.trim().toString().toInt()
+            }
+            else{
+                Toast.makeText(this,"Enter height",Toast.LENGTH_LONG).show()
+            }
+            if (weight.text.trim().length > 0) {
+                user.weight = weight.text.trim().toString().toInt()
+            }
+            else{
+                Toast.makeText(this,"Enter weight",Toast.LENGTH_LONG).show()
+            }
+            if (goal.text.trim().length > 0) {
+                user.goal_steps = goal.text.trim().toString().toLong()
+            }
+            else{
+                Toast.makeText(this,"Enter goal",Toast.LENGTH_LONG).show()
+            }
+
+            if(name_lbl.text.trim().length > 0 &&
+                dob.text.trim().length > 0 &&
+                height.text.trim().length > 0 &&
+                weight.text.trim().length > 0 &&
+                goal.text.trim().length > 0  ){
+                db.userDao()?.insertAll(user)
+                getPermission()
+            }
+            else{
+                Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()
+            }
+
+
         }
+    }
+
+    fun checkuserGoalCreatedOrNot() {
+
+        db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase
+
+        Log.e("Database Created", "Ready to Read/Write")
+
+
+    }
+    fun saveUserInfo() {
+
     }
 
     override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
@@ -102,6 +168,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
         val dobText = findViewById<View>(R.id.dob) as EditText
         dobText.setText(dob)
     }
+
     private fun checkPermissionsAndRun(fitActionRequestCode: FitActionRequestCode) {
         if (permissionApproved()) {
             fitSignIn(fitActionRequestCode)
@@ -111,19 +178,19 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
     }
 
 
-    private fun getPermission(){
+    private fun getPermission() {
 
-        val permissions = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACTIVITY_RECOGNITION
         )
         ActivityCompat.requestPermissions(this, permissions, 0)
         // initializeLogging()
         checkPermissionsAndRun(FitActionRequestCode.SUBSCRIBE)
 
-        var lastSyncTime =  LastSyncSharedPreferences().getLastSyncTime(applicationContext)
-        if(lastSyncTime?.toInt() == 0 ){
-            LastSyncSharedPreferences().setLastSyncTime(mseconds,applicationContext)
+        var lastSyncTime = LastSyncSharedPreferences().getLastSyncTime(applicationContext)
+        if (lastSyncTime?.toInt() == 0) {
+            LastSyncSharedPreferences().setLastSyncTime(mseconds, applicationContext)
         }
 
     }
@@ -161,7 +228,8 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
     }
 
 
-    private fun oAuthPermissionsApproved() = GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions)
+    private fun oAuthPermissionsApproved() =
+        GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions)
 
     /**
      * Gets a Google account for use in creating the Fitness client. This is achieved by either
@@ -218,6 +286,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
             else -> oAuthErrorMsg(requestCode, resultCode)
         }
     }
+
     /**
      * Runs the desired method, based on the specified request code. The request code is typically
      * passed to the Fit sign-in flow, and returned with the success callback. This allows the
@@ -250,6 +319,8 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.i(TAG, "Successfully subscribed!")
+                    var intent= Intent(this, DashBoard::class.java)
+                    startActivity(intent)
                 } else {
                     Log.w(TAG, "There was a problem subscribing.", task.exception)
                 }
@@ -349,6 +420,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
                 )
             }
     }
+
     /**
      * Reads the current daily step total, computed from midnight of the current day on the device's
      * current timezone.
@@ -399,5 +471,5 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener{
         }
     }
 
-  
+
 }

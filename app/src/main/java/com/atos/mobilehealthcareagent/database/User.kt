@@ -24,6 +24,14 @@ class User : BaseObservable() {
     var age = 0
 
     @Bindable
+    @ColumnInfo(name = "dob")
+    var dob = ""
+
+    @Bindable
+    @ColumnInfo(name = "gender")
+    var gender = ""
+
+    @Bindable
     @ColumnInfo(name = "weight")
     var weight = 0
 
