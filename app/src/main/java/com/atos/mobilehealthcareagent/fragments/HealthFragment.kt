@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.DashBoardBuissnessLogic
+import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.generated.callback.OnClickListener
 import kotlinx.android.synthetic.main.dashboard.*
 
@@ -15,6 +16,8 @@ import kotlinx.android.synthetic.main.dashboard.*
 class HealthFragment : Fragment() {
 
     var today=true
+
+    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,9 @@ class HealthFragment : Fragment() {
 
 
     fun initView(){
+        db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
+
+        Log.e("Database Created", "Ready to Read/Write")
       todayOperation()
     }
 
@@ -56,6 +62,7 @@ class HealthFragment : Fragment() {
         txt_today_tomorrow_date.text= DashBoardBuissnessLogic().getToday()
         txt_today_tomorrow.text= getString(R.string.today);
         fetchdata(DashBoardBuissnessLogic().todayStartTimeEndTime())
+
     }
     fun yestardayIperation(){
         today=false
@@ -69,6 +76,16 @@ class HealthFragment : Fragment() {
     fun  fetchdata(list:ArrayList<Long>){
 
         Log.v(""," "+list.get(1))
+        var totalBurnCalorie=db?.userDao()?.getCalorieCount(list.get(0),list.get(1))
+        var totalSteps=db?.userDao()?.getStepCount(list.get(0),list.get(1))
+        var totalDistance=db?.userDao()?.getDistanceCount(list.get(0),list.get(1))
+        var totalHeartoint=db?.userDao()?.getHeartPointCount(list.get(0),list.get(1))
+
+        Log.v("totalBurnCalorie",""+totalBurnCalorie);
+        Log.v("totalSteps",""+totalSteps);
+        Log.v("totalDistance",""+totalDistance);
+        Log.v("totalHeartoint",""+totalHeartoint);
+
     }
 
 }
