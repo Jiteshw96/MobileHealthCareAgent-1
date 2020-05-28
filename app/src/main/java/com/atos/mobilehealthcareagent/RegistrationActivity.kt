@@ -7,18 +7,22 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.text.InputFilter
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
+import com.atos.mobilehealthcareagent.businesslogic.MinMaxFilter
+import com.atos.mobilehealthcareagent.contract.RegistrationActivityInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fitnessharedpreferences.LastSyncSharedPreferences
 import com.atos.mobilehealthcareagent.fragments.DatePickerFragment
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
 import com.atos.mobilehealthcareagent.googlefit.readfitnessapi.ReadFitDataApi
+import com.atos.mobilehealthcareagent.presenter.RegistrationActivityPresenter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
@@ -41,7 +45,8 @@ enum class FitActionRequestCode {
     READ_DATA
 }
 
-class RegistrationActivity : AppCompatActivity(), OnDateSetListener {
+class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
+    RegistrationActivityInterface.RegistrationActivityInterfaceViewInterface {
 
     private val fitnessOptions = FitnessOptions.builder()
         .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
@@ -70,90 +75,13 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener {
 
     lateinit var db: AppDatabase
 
+    lateinit var mRegistrationActivityPresenter: RegistrationActivityPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
+        mRegistrationActivityPresenter=RegistrationActivityPresenter(this,this)
 
-        val dob = findViewById<EditText>(R.id.dob)
-        val spinner = findViewById<Spinner>(R.id.gender_spinner)
-        // val  dataAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.gender,R.layout.custom_spinner)
-
-        var list = ArrayList<String>()
-        list.add("Male")
-        list.add("Female")
-        list.add("Other")
-        list.add("Select Gender")
-      //  val dataAdapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.custom_spinner)
-
-        val dataAdapter: ArrayAdapter<String?> = object :
-            ArrayAdapter<String?>(this, R.layout.custom_spinner, list as List<String?>) {
-            override fun getCount(): Int {
-                return  list.size-1// Truncate the list
-            }
-        }
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = dataAdapter
-        spinner.setSelection(list.size-1)
-
-        checkuserGoalCreatedOrNot()
-
-        dob.setOnClickListener {
-            val datePicker: DialogFragment = DatePickerFragment()
-            datePicker.show(supportFragmentManager, "date picker")
-        }
-
-        val done_btn = findViewById<Button>(R.id.done_btn)
-        done_btn.setOnClickListener {
-
-            var user = User()
-            if (name_lbl.text.trim().length > 0) {
-                user.firstName = name_lbl.text.trim().toString()
-            }
-            else{
-                Toast.makeText(this,"Enter Name",Toast.LENGTH_LONG).show()
-            }
-
-            user.gender = gender_spinner.selectedItem.toString()
-
-            if (dob.text.trim().length > 0) {
-                user.dob = dob.text.trim().toString()
-            }
-            else{
-                Toast.makeText(this,"Select date of birth",Toast.LENGTH_LONG).show()
-            }
-            if (height.text.trim().length > 0) {
-                user.height = height.text.trim().toString().toInt()
-            }
-            else{
-                Toast.makeText(this,"Enter height",Toast.LENGTH_LONG).show()
-            }
-            if (weight.text.trim().length > 0) {
-                user.weight = weight.text.trim().toString().toInt()
-            }
-            else{
-                Toast.makeText(this,"Enter weight",Toast.LENGTH_LONG).show()
-            }
-            if (goal.text.trim().length > 0) {
-                user.goal_steps = goal.text.trim().toString().toLong()
-            }
-            else{
-                Toast.makeText(this,"Enter goal",Toast.LENGTH_LONG).show()
-            }
-
-            if(name_lbl.text.trim().length > 0 &&
-                dob.text.trim().length > 0 &&
-                height.text.trim().length > 0 &&
-                weight.text.trim().length > 0 &&
-                goal.text.trim().length > 0  ){
-                db.userDao()?.insertAll(user)
-                getPermission()
-            }
-            else{
-                Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()
-            }
-
-
-        }
     }
 
     fun checkuserGoalCreatedOrNot() {
@@ -481,5 +409,99 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener {
         }
     }
 
+    fun onclickDoneRegistration(view:View){
+
+
+
+            var user = User()
+            if (name_lbl.text.trim().length > 0) {
+                user.firstName = name_lbl.text.trim().toString()
+            }
+            else{
+                Toast.makeText(this,"Enter Name",Toast.LENGTH_LONG).show()
+            }
+
+            user.gender = gender_spinner.selectedItem.toString()
+
+            if (dob.text.trim().length > 0) {
+                user.dob = dob.text.trim().toString()
+            }
+            else{
+                Toast.makeText(this,"Select date of birth",Toast.LENGTH_LONG).show()
+            }
+            if (height.text.trim().length > 0) {
+                user.height = height.text.trim().toString().toInt()
+            }
+            else{
+                Toast.makeText(this,"Enter height",Toast.LENGTH_LONG).show()
+            }
+            if (weight.text.trim().length > 0) {
+                user.weight = weight.text.trim().toString().toInt()
+            }
+            else{
+                Toast.makeText(this,"Enter weight",Toast.LENGTH_LONG).show()
+            }
+            if (goal.text.trim().length > 0) {
+                user.goal_steps = goal.text.trim().toString().toLong()
+            }
+            else{
+                Toast.makeText(this,"Enter goal",Toast.LENGTH_LONG).show()
+            }
+
+            if(name_lbl.text.trim().length > 0 &&
+                dob.text.trim().length > 0 &&
+                height.text.trim().length > 0 &&
+                weight.text.trim().length > 0 &&
+                goal.text.trim().length > 0  ){
+
+                mRegistrationActivityPresenter.saveUser(user)
+            }
+            else{
+                Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()
+            }
+
+
+    }
+
+    override fun getSDKPermission() {
+        getPermission()
+    }
+
+    override fun init() {
+        height.setFilters(arrayOf<InputFilter>(MinMaxFilter(1, 229)))
+        weight.setFilters(arrayOf<InputFilter>(MinMaxFilter(1, 150)))
+        goal.setFilters(arrayOf<InputFilter>(MinMaxFilter(1, 20000)))
+
+
+        val dob = findViewById<EditText>(R.id.dob)
+        val spinner = findViewById<Spinner>(R.id.gender_spinner)
+        // val  dataAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.gender,R.layout.custom_spinner)
+
+        var list = ArrayList<String>()
+        list.add("Male")
+        list.add("Female")
+        list.add("Other")
+        list.add("Select Gender")
+        //  val dataAdapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.custom_spinner)
+
+        val dataAdapter: ArrayAdapter<String?> = object :
+            ArrayAdapter<String?>(this, R.layout.custom_spinner, list as List<String?>) {
+            override fun getCount(): Int {
+                return  list.size-1// Truncate the list
+            }
+        }
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = dataAdapter
+        spinner.setSelection(list.size-1)
+
+
+
+        dob.setOnClickListener {
+            val datePicker: DialogFragment = DatePickerFragment()
+            datePicker.show(supportFragmentManager, "date picker")
+        }
+
+
+    }
 
 }
