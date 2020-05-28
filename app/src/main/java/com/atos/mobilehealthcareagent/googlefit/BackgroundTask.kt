@@ -292,7 +292,7 @@ class BackgroundTask {
             }
             for(element in data){
                 Log.i("ArrayData",element.toString())
-                totalData = totalData + element.toLong()
+                totalData = totalData + (element.toString()).toDouble().toLong()
             }
             if(data.isNotEmpty()){
                 displayNotification("Data", totalData.toString())

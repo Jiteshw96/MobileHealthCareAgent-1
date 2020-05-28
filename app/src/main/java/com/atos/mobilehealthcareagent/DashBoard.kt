@@ -5,19 +5,14 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.work.*
-import com.atos.mobilehealthcareagent.contract.UserFitnessDatabaseInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
-import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.atos.mobilehealthcareagent.fragments.ProfileFragment
 import com.atos.mobilehealthcareagent.fragments.SecondFragment
 import com.atos.mobilehealthcareagent.fragments.TrendsFragment
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.reflect.Field
 import java.util.*
 import java.util.concurrent.TimeUnit
 
