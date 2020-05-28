@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:orientation="vertical">
 
@@ -14,8 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ic_dashboard_bg"
-            android:scaleType="centerCrop"
-            ></ImageView>
+            android:scaleType="centerCrop"></ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,8 +107,7 @@
 
                     <LinearLayout
                         android:layout_width="50dp"
-                        android:layout_height="match_parent">
-                    </LinearLayout>
+                        android:layout_height="match_parent"></LinearLayout>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -164,23 +162,59 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/steps_progress_bar"
-                                android:layout_width="130dp"
-                                android:layout_height="130dp"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="5dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="@color/white"
-                                app:cpb_progressbar_width="5dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:padding="5dp"
+                                android:gravity="center">
 
-                        </LinearLayout>
+                                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                                    android:id="@+id/steps_progress_bar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+
+                                    app:cpb_background_progressbar_color="#b6bbd8"
+                                    app:cpb_background_progressbar_width="5dp"
+                                    app:cpb_progress_direction="to_right"
+                                    app:cpb_progressbar_color="@color/white"
+                                    app:cpb_progressbar_width="5dp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                >
+
+                                <TextView
+                                    android:id="@+id/txt_steps_count_progress"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|bottom"
+                                    android:layout_weight="1"
+
+                                    android:textColor="#ffffff" />
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|top"
+                                    android:text="STEPS"
+                                    android:textColor="#ffffff" />
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -194,20 +228,21 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/txt_step"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center|left"
-                                    android:text="20" />
+                                    android:text="20"
+                                    android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center"
-                                    android:text="STEPS" />
+                                    android:text="STEPS"
+                                    android:textColor="#FFFFFF" />
 
                             </LinearLayout>
 
@@ -265,23 +300,58 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/calorie_progress_bar"
-                                android:layout_width="130dp"
-                                android:layout_height="130dp"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="5dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="@color/white"
-                                app:cpb_progressbar_width="5dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:padding="5dp"
+                                android:gravity="center">
 
-                        </LinearLayout>
+                                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                                    android:id="@+id/calorie_progress_bar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:cpb_background_progressbar_color="#b6bbd8"
+                                    app:cpb_background_progressbar_width="5dp"
+                                    app:cpb_progress_direction="to_right"
+                                    app:cpb_progressbar_color="@color/white"
+                                    app:cpb_progressbar_width="5dp" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                >
+
+                                <TextView
+                                    android:id="@+id/txt_calorie_count_progress"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|bottom"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff" />
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|top"
+                                    android:text="KCAL"
+                                    android:textColor="#ffffff" />
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
 
 
                         <LinearLayout
@@ -301,16 +371,16 @@
                                     android:id="@+id/txt_calorie"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center|left"
-                                    android:text="520" />
+                                    android:text="520"
+                                    android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center"
-                                    android:text="Kcal To BURN" />
+                                    android:text="Kcal To BURN"
+                                    android:textColor="#FFFFFF" />
 
                             </LinearLayout>
 
@@ -367,23 +437,58 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/distance_progress_bar"
-                                android:layout_width="130dp"
-                                android:layout_height="130dp"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="5dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="@color/white"
-                                app:cpb_progressbar_width="5dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:padding="5dp"
+                                android:gravity="center">
 
-                        </LinearLayout>
+                                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                                    android:id="@+id/distance_progress_bar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:cpb_background_progressbar_color="#b6bbd8"
+                                    app:cpb_background_progressbar_width="5dp"
+                                    app:cpb_progress_direction="to_right"
+                                    app:cpb_progressbar_color="@color/white"
+                                    app:cpb_progressbar_width="5dp" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                >
+
+                                <TextView
+                                    android:id="@+id/txt_diatance_count_progress"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|bottom"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff" />
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|top"
+                                    android:text="KM"
+                                    android:textColor="#ffffff" />
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
 
 
                         <LinearLayout
@@ -403,16 +508,16 @@
                                     android:id="@+id/txt_distance"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center|left"
-                                    android:text="52" />
+                                    android:text="52"
+                                    android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center"
-                                    android:text="KM To GO" />
+                                    android:text="KM To GO"
+                                    android:textColor="#FFFFFF" />
 
                             </LinearLayout>
 
@@ -468,23 +573,58 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/heart_progress_bar"
-                                android:layout_width="130dp"
-                                android:layout_height="130dp"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="5dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="@color/white"
-                                app:cpb_progressbar_width="5dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:padding="5dp"
+                                android:gravity="center">
 
-                        </LinearLayout>
+                                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                                    android:id="@+id/heart_progress_bar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:cpb_background_progressbar_color="#b6bbd8"
+                                    app:cpb_background_progressbar_width="5dp"
+                                    app:cpb_progress_direction="to_right"
+                                    app:cpb_progressbar_color="@color/white"
+                                    app:cpb_progressbar_width="5dp" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                >
+
+                                <TextView
+                                    android:id="@+id/txt_heart_count_progress"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|bottom"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff" />
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|top"
+                                    android:text="POINT"
+                                    android:textColor="#ffffff" />
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -503,16 +643,16 @@
                                     android:id="@+id/txt_heart_point"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center|left"
-                                    android:text="5 HEART POINT " />
+                                    android:text="5 HEART POINT "
+                                    android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
                                     android:gravity="center|left"
-                                    android:text="TO ACHIVE" />
+                                    android:text="TO ACHIVE"
+                                    android:textColor="#FFFFFF" />
 
                             </LinearLayout>
 
