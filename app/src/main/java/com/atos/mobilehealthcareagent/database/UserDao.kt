@@ -37,7 +37,7 @@ interface UserDao {
     fun getStepCount(
         startDate: Long?,
         endDate: Long?
-    ): Integer?
+    ): Double?
 
 
     //SELECT  sum(Cal) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
@@ -45,7 +45,7 @@ interface UserDao {
     fun getCalorieCount(
         startDate: Long?,
         endDate: Long?
-    ): Integer?
+    ): Double?
 
 
     //SELECT  sum(distance) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
@@ -53,7 +53,7 @@ interface UserDao {
     fun getDistanceCount(
         startDate: Long?,
         endDate: Long?
-    ): Integer?
+    ): Double?
 
 
     //SELECT  sum(heartpoint) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
@@ -61,7 +61,7 @@ interface UserDao {
     fun getHeartPointCount(
         startDate: Long?,
         endDate: Long?
-    ): Integer?
+    ): Double?
 
 
     //SELECT  sum(moveminute) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
@@ -69,7 +69,7 @@ interface UserDao {
     fun getMoveMinuteount(
         startDate: Long?,
         endDate: Long?
-    ): Integer?
+    ): Double?
 
 
 

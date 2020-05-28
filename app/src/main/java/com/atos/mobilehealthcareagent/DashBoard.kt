@@ -10,9 +10,13 @@ import com.atos.mobilehealthcareagent.fragments.HealthFragment
 import com.atos.mobilehealthcareagent.fragments.ProfileFragment
 import com.atos.mobilehealthcareagent.fragments.SecondFragment
 import com.atos.mobilehealthcareagent.fragments.TrendsFragment
+import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +43,12 @@ class DashBoard : AppCompatActivity(){
                     // Respond to navigation item 2 click
                        openFragment(TrendsFragment())
                     // open Profile Fragment
+                    var task: BackgroundTask = BackgroundTask(applicationContext)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        task.getFitnessData()
+                    }
+
                     true
                 }
                 R.id.navigation_profile -> {
