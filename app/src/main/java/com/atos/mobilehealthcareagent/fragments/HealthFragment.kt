@@ -87,10 +87,22 @@ class HealthFragment : Fragment() {
         Log.v("totalDistance",""+totalDistance);
         Log.v("totalHeartoint",""+totalHeartoint);
 
-        steps_progress_bar.progress = 85f
-        calorie_progress_bar.progress= 65f
-        distance_progress_bar.progress = 45f
-        heart_progress_bar.progress = 25f
+        val goalSteps = db?.userDao()?.all?.get(0)?.goal_steps
+        val goalCalories = db?.userDao()?.all?.get(0)?.goal_calorie
+        val goalDistance = db?.userDao()?.all?.get(0)?.goal_distance
+        val goalHeartPont = db?.userDao()?.all?.get(0)?.goal_heartpoint
+
+
+        val caloriProgress = (totalBurnCalorie?.div(goalCalories!!))?.times(100)
+        val stepProgress = (totalSteps?.div(goalSteps!!))?.times(100)
+        val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
+        val heartPointProgress = (totalHeartoint?.div(goalHeartPont!!))?.times(100)
+
+
+        steps_progress_bar.progress = stepProgress?.toFloat()!!
+        calorie_progress_bar.progress= caloriProgress?.toFloat()!!
+        distance_progress_bar.progress = distanceProgress?.toFloat()!!
+        heart_progress_bar.progress = heartPointProgress?.toFloat()!!
 
     }
 
