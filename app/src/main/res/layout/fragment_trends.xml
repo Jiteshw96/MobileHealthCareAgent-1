@@ -3,12 +3,138 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.TrendsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Trends" />
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/colorPrimary">
+
+       <com.mikhaellopez.circularprogressbar.CircularProgressBar
+           android:id="@+id/circularProgressBar"
+           android:layout_width="200dp"
+           android:layout_height="200dp"
+           android:layout_marginStart="32dp"
+           android:layout_marginTop="70dp"
+           android:layout_marginEnd="32dp"
+           app:cpb_background_progressbar_color="#b6bbd8"
+           app:cpb_background_progressbar_width="5dp"
+           app:cpb_progress_direction="to_right"
+           app:cpb_progressbar_color="@color/white"
+           app:cpb_progressbar_width="5dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
+       <LinearLayout
+           android:id="@+id/linearLayout"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
+           app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
+           app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
+           app:layout_constraintTop_toTopOf="@+id/circularProgressBar">
+
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="5,450"
+               android:textColor="@color/white"
+               android:textSize="52sp"></TextView>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="Steps"
+               android:textAllCaps="true"
+               android:textColor="@color/white"
+               android:textSize="24sp"></TextView>
+       </LinearLayout>
+
+       <TextView
+           android:id="@+id/textView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Today"
+           android:textAllCaps="true"
+           android:textColor="@color/white"
+           android:textSize="18sp"
+           app:layout_constraintBottom_toTopOf="@+id/circularProgressBar"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
+       <TextView
+           android:id="@+id/textView2"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="32dp"
+           android:gravity="center|center_horizontal"
+           android:text="1,500 Steps to go"
+           android:textAllCaps="true"
+           android:textColor="@color/white"
+           android:textSize="18sp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/circularProgressBar"/>
+
+
+       <RadioGroup
+           android:id="@+id/toggle"
+           android:layout_width="match_parent"
+           android:layout_height="30dp"
+           android:layout_marginStart="32dp"
+           android:layout_marginTop="40dp"
+           android:layout_marginEnd="32dp"
+           android:background="@drawable/togglebackground"
+           android:checkedButton="@+id/daily"
+           android:orientation="horizontal"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+           <RadioButton
+               android:id="@+id/daily"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:background="@drawable/toggle_widget_background"
+               android:button="@null"
+               android:gravity="center"
+               android:text="Daily"
+               android:textAllCaps="true"
+               android:textColor="@color/white" />
+
+           <RadioButton
+               android:id="@+id/weekly"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:background="@drawable/toggle_widget_background"
+               android:button="@null"
+               android:gravity="center"
+               android:text="Weekly"
+               android:textAllCaps="true"
+               android:textColor="@color/white" />
+       </RadioGroup>
+
+       <com.github.mikephil.charting.charts.LineChart
+           android:id="@+id/chart"
+           android:layout_width="0dp"
+           android:layout_height="200dp"
+           android:layout_marginStart="32dp"
+           android:layout_marginTop="20dp"
+           android:layout_marginEnd="32dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/toggle" />
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>
