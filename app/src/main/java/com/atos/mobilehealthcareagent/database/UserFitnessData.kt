@@ -27,18 +27,18 @@ class UserFitnessData {
     var timestamp = 0L
 
     @ColumnInfo(name = "steps")
-    var steps = 0L
+    var steps = 0.0
 
     @ColumnInfo(name = "calorie")
-    var calorie = 0L
+    var calorie = 0.0
 
     @ColumnInfo(name = "distance")
-    var distance = 0L
+    var distance = 0.0
 
     @ColumnInfo(name = "heartpoint")
-    var heartpoint = 0
+    var heartpoint = 0.0
 
     @ColumnInfo(name = "moveminute")
-    var moveminute = 0L
+    var moveminute = 0.0
 
 }

@@ -205,7 +205,7 @@ class BackgroundTask {
 
             taskGetSteps.addOnSuccessListener{
                 CoroutineScope(Dispatchers.IO).launch {
-                    var steps:Long =  DataParsing(taskGetSteps.result,com.google.android.gms.fitness.data.Field.FIELD_STEPS)
+                    var steps =  DataParsing(taskGetSteps.result,com.google.android.gms.fitness.data.Field.FIELD_STEPS)
                     user.steps = steps
                 }
 
@@ -220,7 +220,7 @@ class BackgroundTask {
             )
 
                 taskGetCalories.addOnSuccessListener{
-                    var calories:Long = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_CALORIES)
+                    var calories = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_CALORIES)
                     user.calorie = calories
 
                     //Task Get HeartPoints
@@ -233,8 +233,8 @@ class BackgroundTask {
 
                     taskGetHeartPoints.addOnSuccessListener{
                         CoroutineScope(Dispatchers.IO).launch {
-                            var heartPoints:Long =  DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
-                            user.heartpoint = heartPoints.toInt()
+                            var heartPoints =  DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
+                            user.heartpoint = heartPoints
                             //Task Get Distance
                             val taskGetDistanec:Task<DataReadResponse> =  readFitDataApi.getDistanceimeInterval(
                                 GetDateDetailsStartEndTime.DateStartEnd(
@@ -244,8 +244,8 @@ class BackgroundTask {
                             )
                             taskGetDistanec.addOnSuccessListener{
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    var distance:Long = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_DISTANCE)
-                                    user.distance = distance.toLong()
+                                    var distance = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_DISTANCE)
+                                    user.distance = distance
                                     //Task Get Movement
                                     val taskGetMoveMinutes:Task<DataReadResponse> =  readFitDataApi.getMoveMinuteInterval(
                                         GetDateDetailsStartEndTime.DateStartEnd(
@@ -256,8 +256,8 @@ class BackgroundTask {
 
                                     taskGetMoveMinutes.addOnSuccessListener{
                                         CoroutineScope(Dispatchers.IO).launch {
-                                            var moveMinutes:Long = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
-                                            user.moveminute = moveMinutes.toLong()
+                                            var moveMinutes = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
+                                            user.moveminute = moveMinutes
                                             LastSyncSharedPreferences().setLastSyncTime(mSeconds,context)
                                             db.userDao()?.insertAllFitnessData(user)
                                             Log.i("Database Data" , db.userDao()?.allFitnessData?.size.toString())
@@ -278,10 +278,10 @@ class BackgroundTask {
 
 
 
-     fun DataParsing(dataReadResult: DataReadResponse?,fieldName: Field): Long{
+     fun DataParsing(dataReadResult: DataReadResponse?,fieldName: Field): Double{
         Log.i("Bucket",dataReadResult?.buckets.toString())
         val data = arrayListOf<String>()
-        var totalData:Long = 0L
+        var totalData:Double = 0.0
         if(dataReadResult!!.buckets.isNotEmpty()){
             for (bucket in dataReadResult.buckets) {
                 bucket.dataSets.forEach {
@@ -292,7 +292,7 @@ class BackgroundTask {
             }
             for(element in data){
                 Log.i("ArrayData",element.toString())
-                totalData = totalData + (element.toString()).toDouble().toLong()
+                totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
                 displayNotification("Data", totalData.toString())
