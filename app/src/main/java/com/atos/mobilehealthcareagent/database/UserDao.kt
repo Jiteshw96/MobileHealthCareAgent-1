@@ -33,7 +33,7 @@ interface UserDao {
     val allFitnessData: List<UserFitnessData?>?
 
     //SELECT  sum(steps) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
-    @Query("SELECT SUM(steps) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(steps),0) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
     fun getStepCount(
         startDate: Long?,
         endDate: Long?
@@ -41,7 +41,7 @@ interface UserDao {
 
 
     //SELECT  sum(Cal) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
-    @Query("SELECT SUM(calorie) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(calorie),0) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
     fun getCalorieCount(
         startDate: Long?,
         endDate: Long?
@@ -49,7 +49,7 @@ interface UserDao {
 
 
     //SELECT  sum(distance) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
-    @Query("SELECT SUM(distance) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(distance),0) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
     fun getDistanceCount(
         startDate: Long?,
         endDate: Long?
@@ -57,7 +57,7 @@ interface UserDao {
 
 
     //SELECT  sum(heartpoint) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
-    @Query("SELECT SUM(heartpoint) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(heartpoint),0) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
     fun getHeartPointCount(
         startDate: Long?,
         endDate: Long?
@@ -65,7 +65,7 @@ interface UserDao {
 
 
     //SELECT  sum(moveminute) as value from Datae WHERE Datae.Date BETWEEN 1590060600000 and 1590066388079
-    @Query("SELECT SUM(moveminute) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(moveminute),0) FROM user_fitness_data where timestamp between  :startDate AND :endDate")
     fun getMoveMinuteount(
         startDate: Long?,
         endDate: Long?
