@@ -195,72 +195,95 @@ class BackgroundTask {
             withContext(Dispatchers.Default) {
 
 
-           //Task Get Steps
-            val taskGetSteps: Task<DataReadResponse> =  readFitDataApi.getStepsTimeInterval(
-                GetDateDetailsStartEndTime.DateStartEnd(
-                    mStartDate, mEndDate,
-                    mStartTimeInMili.time, mEndTimeInMili.time
+                //Task Get Steps
+                val taskGetSteps: Task<DataReadResponse> = readFitDataApi.getStepsTimeInterval(
+                    GetDateDetailsStartEndTime.DateStartEnd(
+                        mStartDate, mEndDate,
+                        mStartTimeInMili.time, mEndTimeInMili.time
+                    )
                 )
-            )
 
-            taskGetSteps.addOnSuccessListener{
-                CoroutineScope(Dispatchers.IO).launch {
-                    var steps =  DataParsing(taskGetSteps.result,com.google.android.gms.fitness.data.Field.FIELD_STEPS)
-                    user.steps = steps
-                }
+                taskGetSteps.addOnSuccessListener {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        var steps = DataParsingSteps(
+                            taskGetSteps.result,
+                            com.google.android.gms.fitness.data.Field.FIELD_STEPS
+                        )
+                        user.steps = steps
+                    }
 
-            }
 
-            //Task Get Calories
-                val taskGetCalories:Task<DataReadResponse> =  readFitDataApi.getCalorieInTimeInterval(
-                GetDateDetailsStartEndTime.DateStartEnd(
-                    mStartDate, mEndDate,
-                    mStartTimeInMili.time, mEndTimeInMili.time
-                )
-            )
 
-                taskGetCalories.addOnSuccessListener{
-                    var calories = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_CALORIES)
-                    user.calorie = calories
-
-                    //Task Get HeartPoints
-                    val taskGetHeartPoints:Task<DataReadResponse> =  readFitDataApi.getHeartPointimeInterval(
+                //Task Get Calories
+                val taskGetCalories: Task<DataReadResponse> =
+                    readFitDataApi.getCalorieInTimeInterval(
                         GetDateDetailsStartEndTime.DateStartEnd(
                             mStartDate, mEndDate,
                             mStartTimeInMili.time, mEndTimeInMili.time
                         )
                     )
 
-                    taskGetHeartPoints.addOnSuccessListener{
+                taskGetCalories.addOnSuccessListener {
+                    var calories =
+                        DataParsingCalorie(it, com.google.android.gms.fitness.data.Field.FIELD_CALORIES)
+                    user.calorie = calories
+
+                    //Task Get HeartPoints
+                    val taskGetHeartPoints: Task<DataReadResponse> =
+                        readFitDataApi.getHeartPointimeInterval(
+                            GetDateDetailsStartEndTime.DateStartEnd(
+                                mStartDate, mEndDate,
+                                mStartTimeInMili.time, mEndTimeInMili.time
+                            )
+                        )
+
+                    taskGetHeartPoints.addOnSuccessListener {
                         CoroutineScope(Dispatchers.IO).launch {
-                            var heartPoints =  DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
+                            var heartPoints = DataParsingHeartPoint(
+                                it,
+                                com.google.android.gms.fitness.data.Field.FIELD_INTENSITY
+                            )
                             user.heartpoint = heartPoints
                             //Task Get Distance
-                            val taskGetDistanec:Task<DataReadResponse> =  readFitDataApi.getDistanceimeInterval(
-                                GetDateDetailsStartEndTime.DateStartEnd(
-                                    mStartDate, mEndDate,
-                                    mStartTimeInMili.time, mEndTimeInMili.time
+                            val taskGetDistanec: Task<DataReadResponse> =
+                                readFitDataApi.getDistanceimeInterval(
+                                    GetDateDetailsStartEndTime.DateStartEnd(
+                                        mStartDate, mEndDate,
+                                        mStartTimeInMili.time, mEndTimeInMili.time
+                                    )
                                 )
-                            )
-                            taskGetDistanec.addOnSuccessListener{
+                            taskGetDistanec.addOnSuccessListener {
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    var distance = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_DISTANCE)
+                                    var distance = DataParsingDistance(
+                                        it,
+                                        com.google.android.gms.fitness.data.Field.FIELD_DISTANCE
+                                    )
                                     user.distance = distance
                                     //Task Get Movement
-                                    val taskGetMoveMinutes:Task<DataReadResponse> =  readFitDataApi.getMoveMinuteInterval(
-                                        GetDateDetailsStartEndTime.DateStartEnd(
-                                            mStartDate, mEndDate,
-                                            mStartTimeInMili.time, mEndTimeInMili.time
+                                    val taskGetMoveMinutes: Task<DataReadResponse> =
+                                        readFitDataApi.getMoveMinuteInterval(
+                                            GetDateDetailsStartEndTime.DateStartEnd(
+                                                mStartDate, mEndDate,
+                                                mStartTimeInMili.time, mEndTimeInMili.time
+                                            )
                                         )
-                                    )
 
-                                    taskGetMoveMinutes.addOnSuccessListener{
+                                    taskGetMoveMinutes.addOnSuccessListener {
                                         CoroutineScope(Dispatchers.IO).launch {
-                                            var moveMinutes = DataParsing(it,com.google.android.gms.fitness.data.Field.FIELD_INTENSITY)
+                                            var moveMinutes = DataParsingMoveMinute(
+                                                it,
+                                                com.google.android.gms.fitness.data.Field.FIELD_DURATION
+                                            )
                                             user.moveminute = moveMinutes
-                                            LastSyncSharedPreferences().setLastSyncTime(mSeconds,context)
+                                            LastSyncSharedPreferences().setLastSyncTime(
+                                                mSeconds,
+                                                context
+                                            )
                                             db.userDao()?.insertAllFitnessData(user)
-                                            Log.i("Database Data" , db.userDao()?.allFitnessData?.size.toString())
+                                            Log.i(
+                                                "Database Data",
+                                                db.userDao()?.allFitnessData?.size.toString()
+                                            )
                                         }
                                     }
                                 }
@@ -271,6 +294,7 @@ class BackgroundTask {
                     }
 
                 }
+            }
 
             }
         }
@@ -278,7 +302,7 @@ class BackgroundTask {
 
 
 
-     fun DataParsing(dataReadResult: DataReadResponse?,fieldName: Field): Double{
+    fun DataParsingSteps(dataReadResult: DataReadResponse?,fieldName: Field): Double{
         Log.i("Bucket",dataReadResult?.buckets.toString())
         val data = arrayListOf<String>()
         var totalData:Double = 0.0
@@ -303,6 +327,103 @@ class BackgroundTask {
         return  totalData
     }
 
+    fun DataParsingCalorie(dataReadResult: DataReadResponse?,fieldName: Field): Double{
+        Log.i("Bucket",dataReadResult?.buckets.toString())
+        val data = arrayListOf<String>()
+        var totalData:Double = 0.0
+        if(dataReadResult!!.buckets.isNotEmpty()){
+            for (bucket in dataReadResult.buckets) {
+                bucket.dataSets.forEach {
+                    if (it.dataPoints.size > 0){
+                        data.add(it.dataPoints.get(0).getValue(fieldName).toString())
+                    }
+                }
+            }
+            for(element in data){
+                Log.i("ArrayData",element.toString())
+                totalData = totalData + (element.toString()).toDouble()
+            }
+            if(data.isNotEmpty()){
+                displayNotification("Data", totalData.toString())
+            }else{
+                displayNotification("Data", "No Record")
+            }
+        }
+        return  totalData
+    }
+
+    fun DataParsingHeartPoint(dataReadResult: DataReadResponse?,fieldName: Field): Double{
+        Log.i("Bucket",dataReadResult?.buckets.toString())
+        val data = arrayListOf<String>()
+        var totalData:Double = 0.0
+        if(dataReadResult!!.buckets.isNotEmpty()){
+            for (bucket in dataReadResult.buckets) {
+                bucket.dataSets.forEach {
+                    if (it.dataPoints.size > 0){
+                        data.add(it.dataPoints.get(0).getValue(fieldName).toString())
+                    }
+                }
+            }
+            for(element in data){
+                Log.i("ArrayData",element.toString())
+                totalData = totalData + (element.toString()).toDouble()
+            }
+            if(data.isNotEmpty()){
+                displayNotification("Data", totalData.toString())
+            }else{
+                displayNotification("Data", "No Record")
+            }
+        }
+        return  totalData
+    }
+    fun DataParsingDistance(dataReadResult: DataReadResponse?,fieldName: Field): Double{
+        Log.i("Bucket",dataReadResult?.buckets.toString())
+        val data = arrayListOf<String>()
+        var totalData:Double = 0.0
+        if(dataReadResult!!.buckets.isNotEmpty()){
+            for (bucket in dataReadResult.buckets) {
+                bucket.dataSets.forEach {
+                    if (it.dataPoints.size > 0){
+                        data.add(it.dataPoints.get(0).getValue(fieldName).toString())
+                    }
+                }
+            }
+            for(element in data){
+                Log.i("ArrayData",element.toString())
+                totalData = totalData + (element.toString()).toDouble()
+            }
+            if(data.isNotEmpty()){
+                displayNotification("Data", totalData.toString())
+            }else{
+                displayNotification("Data", "No Record")
+            }
+        }
+        return  totalData
+    }
+    fun DataParsingMoveMinute(dataReadResult: DataReadResponse?,fieldName: Field): Double{
+        Log.i("Bucket",dataReadResult?.buckets.toString())
+        val data = arrayListOf<String>()
+        var totalData:Double = 0.0
+        if(dataReadResult!!.buckets.isNotEmpty()){
+            for (bucket in dataReadResult.buckets) {
+                bucket.dataSets.forEach {
+                    if (it.dataPoints.size > 0){
+                        data.add(it.dataPoints.get(0).getValue(fieldName).toString())
+                    }
+                }
+            }
+            for(element in data){
+                Log.i("ArrayData",element.toString())
+                totalData = totalData + (element.toString()).toDouble()
+            }
+            if(data.isNotEmpty()){
+                displayNotification("Data", totalData.toString())
+            }else{
+                displayNotification("Data", "No Record")
+            }
+        }
+        return  totalData
+    }
 
      fun displayNotification(task: String, desc: String?) {
         val manager =

@@ -76,33 +76,36 @@ class HealthFragment : Fragment() {
 
     fun  fetchdata(list:ArrayList<Long>){
 
-        Log.v(""," "+list.get(1))
-        var totalBurnCalorie=db?.userDao()?.getCalorieCount(list.get(0),list.get(1))
-        var totalSteps=db?.userDao()?.getStepCount(list.get(0),list.get(1))
-        var totalDistance=db?.userDao()?.getDistanceCount(list.get(0),list.get(1))
-        var totalHeartoint=db?.userDao()?.getHeartPointCount(list.get(0),list.get(1))
+        if(db?.userDao()?.allFitnessData?.size!=0) {
+            Log.v("", " " + list.get(1))
+            var totalBurnCalorie = db?.userDao()?.getCalorieCount(list.get(0), list.get(1))
+            var totalSteps = db?.userDao()?.getStepCount(list.get(0), list.get(1))
+            var totalDistance = db?.userDao()?.getDistanceCount(list.get(0), list.get(1))
+            var totalHeartoint = db?.userDao()?.getHeartPointCount(list.get(0), list.get(1))
 
-        Log.v("totalBurnCalorie",""+totalBurnCalorie);
-        Log.v("totalSteps",""+totalSteps);
-        Log.v("totalDistance",""+totalDistance);
-        Log.v("totalHeartoint",""+totalHeartoint);
+            Log.v("totalBurnCalorie", "" + totalBurnCalorie);
+            Log.v("totalSteps", "" + totalSteps);
+            Log.v("totalDistance", "" + totalDistance);
+            Log.v("totalHeartoint", "" + totalHeartoint);
 
-        val goalSteps = db?.userDao()?.all?.get(0)?.goal_steps
-        val goalCalories = db?.userDao()?.all?.get(0)?.goal_calorie
-        val goalDistance = db?.userDao()?.all?.get(0)?.goal_distance
-        val goalHeartPont = db?.userDao()?.all?.get(0)?.goal_heartpoint
-
-
-        val caloriProgress = (totalBurnCalorie?.div(goalCalories!!))?.times(100)
-        val stepProgress = (totalSteps?.div(goalSteps!!))?.times(100)
-        val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
-        val heartPointProgress = (totalHeartoint?.div(goalHeartPont!!))?.times(100)
+            val goalSteps = db?.userDao()?.all?.get(0)?.goal_steps
+            val goalCalories = db?.userDao()?.all?.get(0)?.goal_calorie
+            val goalDistance = db?.userDao()?.all?.get(0)?.goal_distance
+            val goalHeartPont = db?.userDao()?.all?.get(0)?.goal_heartpoint
 
 
-        steps_progress_bar.progress = stepProgress?.toFloat()!!
-        calorie_progress_bar.progress= caloriProgress?.toFloat()!!
-        distance_progress_bar.progress = distanceProgress?.toFloat()!!
-        heart_progress_bar.progress = heartPointProgress?.toFloat()!!
+            val caloriProgress = (totalBurnCalorie?.div(goalCalories!!))?.times(100)
+            val stepProgress = (totalSteps?.div(goalSteps!!))?.times(100)
+            val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
+            val heartPointProgress = (totalHeartoint?.div(goalHeartPont!!))?.times(100)
+
+
+
+            steps_progress_bar.progress = stepProgress?.toFloat()!!
+            calorie_progress_bar.progress = caloriProgress?.toFloat()!!
+            distance_progress_bar.progress = distanceProgress?.toFloat()!!
+            heart_progress_bar.progress = heartPointProgress?.toFloat()!!
+        }
 
     }
 
