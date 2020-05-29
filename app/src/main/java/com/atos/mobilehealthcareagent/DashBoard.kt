@@ -41,7 +41,7 @@ class DashBoard : AppCompatActivity(){
                 }
                 R.id.navigation_trends-> {
                     // Respond to navigation item 2 click
-                       openFragment(TrendsFragment())
+                     openFragment(TrendsFragment())
                     // open Profile Fragment
                     var task: BackgroundTask = BackgroundTask(applicationContext)
 
