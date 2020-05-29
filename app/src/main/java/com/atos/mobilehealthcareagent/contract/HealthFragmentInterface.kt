@@ -1,13 +1,12 @@
 package com.atos.mobilehealthcareagent.contract
 
-import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.database.UserFitnessData
 
 
 interface HealthFragmentInterface {
-    interface DashBoardActivityInterfaceViewInterface {
+    interface HealthFragmentInterfaceViewInterface {
         fun initView()
 
 
@@ -15,17 +14,23 @@ interface HealthFragmentInterface {
 
         fun yestardayIperation()
 
-        fun fetchdata()
+
+        fun setCalorieProgressGraph(value: Float, toInt: Int)
+        fun setStepProgressGraph(value: Float, toInt: Int)
+        fun setDistanceProgressGraph(value: Float, toInt: Int)
+        fun setHeartPointProgressGraph(value: Float, toInt: Int)
 
     }
 
-    interface DashBoardActivityInterfacePresenterInterface {
+    interface HealthFragmentInterfacePresenterInterface {
         fun initialize()
+        fun getUserInfo(db:AppDatabase): User?
+        fun getProgressGraph(list:ArrayList<Long>)
 
     }
 
-    interface DashBoardActivityInterfaceModelInterface {
-        fun getUserInfo(db:AppDatabase): User?
+    interface HealthFragmentInterfaceModelInterface {
+        fun getUserInfo(db:AppDatabase): List<User?>?
         fun getFitnessDataCount(db:AppDatabase):List<UserFitnessData?>?
         fun getCalorieCount(startDate: Long?,endDate: Long?,db:AppDatabase): Double?
         fun getStepCount(startDate: Long?,endDate: Long?,db:AppDatabase): Double?
