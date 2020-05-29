@@ -30,6 +30,13 @@ class GetDateDetailsStartEndTime {
 
     }
 
+    public fun ListOfWeekForGraph(weeks:Int):ArrayList<DateStartEnd> {
+
+        return getWeeWeekData("","yyyy-MM-dd", weeks)
+
+
+    }
+
     fun getCalculatedDate(date: String, dateFormat: String, days: Int): ArrayList<DateStartEnd> {
         var mDays=ArrayList<DateStartEnd>()
         for(i in days downTo 1)
@@ -230,6 +237,93 @@ class GetDateDetailsStartEndTime {
 
         return mDays
     }
+
+    fun getWeeWeekData(date: String, dateFormat: String, weeks: Int):ArrayList<DateStartEnd> {
+
+        var mWeek=ArrayList<DateStartEnd>()
+
+        val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val s = SimpleDateFormat(dateFormat)
+        var c = Calendar.getInstance()
+        //var date = Date()
+
+
+        val calendarCurrentStart = Calendar.getInstance()
+        while (calendarCurrentStart[Calendar.DAY_OF_WEEK] !== Calendar.SUNDAY) {
+            calendarCurrentStart.add(Calendar.DATE, -1)
+        }
+        val start = calendarCurrentStart.time
+        var startDate=s.format(Date(calendarCurrentStart.timeInMillis))
+
+        var currentStartDate=calendarCurrentStart.time
+        calendarCurrentStart.add(Calendar.DATE, 6)
+
+        val end = calendarCurrentStart.time
+        var endDate=s.format(Date(calendarCurrentStart.timeInMillis))
+
+
+
+
+        var mStartDate=startDate+" 00:00:01"
+        var mEndDate=endDate+" 23:59:59"
+        var mStartTimeInMili=sdf.parse(mStartDate)
+        var mEndTimeInMili=sdf.parse(mEndDate)
+
+        mWeek.add(
+            DateStartEnd(
+                mStartDate,
+                mEndDate,
+                mStartTimeInMili.time,
+                mEndTimeInMili.time
+            )
+        )
+
+
+        for (i in weeks-1 downTo 1) {
+            // c.time = date
+            val i = c[Calendar.DAY_OF_WEEK] - c.firstDayOfWeek
+            c.add(Calendar.DATE, -i - 7)
+            val start = c.time
+            var startDate=s.format(Date(c.timeInMillis))
+            c.add(Calendar.DATE, 6)
+            val end = c.time
+
+
+
+            var endDate=s.format(Date(c.timeInMillis))
+            var mStartDate=startDate+" 00:00:01"
+            var mEndDate=endDate+" 23:59:59"
+            var mStartTimeInMili=sdf.parse(mStartDate)
+            var mEndTimeInMili=sdf.parse(mEndDate)
+
+            mWeek.add(
+                DateStartEnd(
+                    mStartDate,
+                    mEndDate,
+                    mStartTimeInMili.time,
+                    mEndTimeInMili.time
+                )
+            )
+
+
+            println("$start - $end")
+            c.add(Calendar.DATE,-6)
+        }
+
+    return mWeek
+
+
+
+    }
+
+
+
+
+
+
+
 
     class DateStartEnd(var mStartDate:String,var mEndDate:String,var mStartTimeInMili:Long,var mEndTimeInMili:Long){
 
