@@ -8,36 +8,37 @@ import kotlinx.android.synthetic.main.activity_set_goals.*
 
 class SetGoalsActivity : AppCompatActivity() {
 
+    var  data = arrayOfNulls<String>(3)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_goals)
 
-        val getIntent = getIntent()
 
-        val data = arrayOfNulls<String>(30)
 
-        for (i in 1..30) {
-            data[i - 1] = (i * 1000).toString()
-        }
+        data[0] = (5 * 1000).toString()
+        data[1] = (6 * 1000).toString()
+        data[2] = (7 * 1000).toString()
+
+
+//        for (i in 6..8) {
+//            data[i - 1] = (i * 1000).toString()
+//        }
 
         val numberPicker = findViewById<NumberPicker>(R.id.numberPicker)
         numberPicker.minValue = 1
         numberPicker.maxValue = data.size
         numberPicker.displayedValues = data
         numberPicker.wrapSelectorWheel = false
-        numberPicker.value = 7
-        numberPicker.wheelItemCount = 8
+        numberPicker.value = 2
+        numberPicker.wheelItemCount = 6
 
         set_btn.setOnClickListener{
 
             val intent = Intent(this,RegistrationActivity::class.java)
-            intent.putExtra("Goal",numberPicker.value.times(1000).toString())
-            intent.putExtra("name", getIntent.getStringExtra("name"))
-            intent.putExtra("gender", getIntent.getIntExtra("gender",0))
-            intent.putExtra("dob", getIntent.getStringExtra("dob"))
-            intent.putExtra("height", getIntent.getStringExtra("height"))
-            intent.putExtra("weight", getIntent.getStringExtra("weight"))
+            intent.putExtra("Goal",data[numberPicker.value-1].toString())
             startActivity(intent)
+            finish()
 
         }
     }
