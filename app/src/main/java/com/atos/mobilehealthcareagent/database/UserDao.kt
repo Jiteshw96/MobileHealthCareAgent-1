@@ -79,6 +79,10 @@ interface UserDao {
     @get:Query("SELECT * FROM user_goal")
     val allGoal: List<Goal?>?
 
+    @Query("SELECT * FROM user_goal where steps = :steps")
+    fun getGoalValue(
+        steps:Long?
+    ):Goal?
 
 
 }

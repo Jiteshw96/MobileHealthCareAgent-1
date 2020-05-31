@@ -49,6 +49,10 @@ class DashBoard : AppCompatActivity(),
 
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
      override fun initLongRunningService() {
         val data = Data.Builder()
             .putString(SecondFragment.KEY_TASK_DESC, "Hey "+ Calendar.getInstance().getTime().toString())

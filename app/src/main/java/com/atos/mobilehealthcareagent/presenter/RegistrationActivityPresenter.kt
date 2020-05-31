@@ -29,9 +29,18 @@ class RegistrationActivityPresenter :
     override fun init() {
         db = AppDatabase.getAppDatabase(context) as AppDatabase
         mRegistrationActivityInterfaceViewInterface.init()
+        mRegistrationActivityInterfaceViewInterface.checkuserGoalCreatedOrNot()
     }
 
-    override fun saveUser(user: User) {
+    override fun saveUser(user: User,goal:Long) {
+
+        var goal=db.userDao()?.getGoalValue(goal)
+
+        user.goal_calorie= goal?.calorie!!
+        user.goal_steps= goal?.steps!!
+        user.goal_distance= goal?.distance!!
+        user.goal_heartpoint= goal?.heartpoint!!
+        user.goal_moveminute= goal?.moveminute!!
         db.userDao()?.insertAll(user)
         mRegistrationActivityInterfaceViewInterface.getSDKPermission()
 
