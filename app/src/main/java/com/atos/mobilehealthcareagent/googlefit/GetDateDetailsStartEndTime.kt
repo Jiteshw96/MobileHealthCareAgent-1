@@ -314,8 +314,6 @@ class GetDateDetailsStartEndTime {
 
     return mWeek
 
-
-
     }
 
 

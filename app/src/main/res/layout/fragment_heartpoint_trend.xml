@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.TrendsFragment">
+    tools:context=".fragments.HeartPointTrendFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
-            android:id="@+id/circularProgressBar"
+            android:id="@+id/heartPointProgressBar"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginStart="32dp"
@@ -40,13 +40,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
-            app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
-            app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
-            app:layout_constraintTop_toTopOf="@+id/circularProgressBar">
+            app:layout_constraintBottom_toBottomOf="@+id/heartPointProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/heartPointProgressBar"
+            app:layout_constraintStart_toStartOf="@+id/heartPointProgressBar"
+            app:layout_constraintTop_toTopOf="@+id/heartPointProgressBar">
 
 
             <TextView
+                android:id="@+id/curret_heartpoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -73,13 +74,13 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/circularProgressBar"
+            app:layout_constraintBottom_toTopOf="@+id/heartPointProgressBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/heartpoint_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -90,7 +91,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circularProgressBar" />
+            app:layout_constraintTop_toBottomOf="@+id/heartPointProgressBar" />
 
 
         <RadioGroup
@@ -105,7 +106,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
+            app:layout_constraintTop_toBottomOf="@+id/heartpoint_desc">
 
             <RadioButton
                 android:id="@+id/daily"
@@ -133,7 +134,20 @@
         </RadioGroup>
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
+            android:id="@+id/daily_heartpoint_chart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toggle" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/weekly_heartpoint_chart"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"

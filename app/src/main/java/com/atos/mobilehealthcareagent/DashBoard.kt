@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.work.*
+import com.atos.mobilehealthcareagent.contract.DashBoardActivityInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
-import com.atos.mobilehealthcareagent.fragments.HealthFragment
-import com.atos.mobilehealthcareagent.fragments.ProfileFragment
-import com.atos.mobilehealthcareagent.fragments.SecondFragment
-import com.atos.mobilehealthcareagent.fragments.TrendsFragment
+import com.atos.mobilehealthcareagent.fragments.*
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
+import com.atos.mobilehealthcareagent.presenter.DashBoardActivityPresenter
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,51 +20,19 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class DashBoard : AppCompatActivity(){
+class DashBoard : AppCompatActivity(),
+    DashBoardActivityInterface.DashBoardActivityInterfaceViewInterface {
 
     lateinit var db: AppDatabase
+    lateinit var mDashBoardActivityPresenter: DashBoardActivityPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        openFragment(HealthFragment())
-        checkuserGoalCreatedOrNot()
-
-        bottom_navigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_health -> {
-                    // Respond to navigation item 1 click
-                    openFragment(HealthFragment())
-                    true
-                }
-                R.id.navigation_trends-> {
-                    // Respond to navigation item 2 click
-                     openFragment(TrendsFragment())
-                    // open Profile Fragment
-                    var task: BackgroundTask = BackgroundTask(applicationContext)
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        task.getFitnessData()
-                    }
-
-                    true
-                }
-                R.id.navigation_profile -> {
-                    // Respond to navigation item 3 click
-                      openFragment(ProfileFragment())
-                    // open navigation fragment
-                    true
-                }
-                else -> false
-            }
-        }
-        initLongRunningService()
-
-
+        mDashBoardActivityPresenter=DashBoardActivityPresenter(this,this)
     }
 
-    fun openFragment(fragment: Fragment?) {
+    override fun openFragment(fragment: Fragment?) {
         val transaction =
             supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment!!)
@@ -74,7 +41,7 @@ class DashBoard : AppCompatActivity(){
     }
 
 
-    fun checkuserGoalCreatedOrNot() {
+    override fun checkuserGoalCreatedOrNot() {
 
         db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase
 
@@ -83,7 +50,7 @@ class DashBoard : AppCompatActivity(){
 
     }
 
-     fun initLongRunningService() {
+     override fun initLongRunningService() {
         val data = Data.Builder()
             .putString(SecondFragment.KEY_TASK_DESC, "Hey "+ Calendar.getInstance().getTime().toString())
             .build()
@@ -100,6 +67,40 @@ class DashBoard : AppCompatActivity(){
 
         WorkManager.getInstance().enqueueUniquePeriodicWork("MobileHealthCareAgent",
             ExistingPeriodicWorkPolicy.KEEP,request);
+    }
+
+    override fun initialize(){
+
+        bottom_navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_health -> {
+                    // Respond to navigation item 1 click
+                    openFragment(HealthFragment())
+                    true
+                }
+                R.id.navigation_trends-> {
+                    // Respond to navigation item 2 click
+                   // openFragment(TrendsFragment())
+                    openFragment(DistanceTrendFragment())
+                    // open Profile Fragment
+                    var task: BackgroundTask = BackgroundTask(applicationContext)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        task.getFitnessData()
+                    }
+
+                    true
+                }
+                R.id.navigation_profile -> {
+                    // Respond to navigation item 3 click
+                    openFragment(ProfileFragment())
+                    // open navigation fragment
+                    true
+                }
+                else -> false
+            }
+        }
+
     }
 
 

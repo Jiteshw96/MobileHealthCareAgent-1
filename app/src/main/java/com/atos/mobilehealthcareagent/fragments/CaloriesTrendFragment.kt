@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
-import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime.DateStartEnd
-import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime.DateStartEndForGraph
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -24,23 +22,23 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.android.synthetic.main.fragment_trends.*
+import kotlinx.android.synthetic.main.fragment_calories_trend.*
+import kotlinx.android.synthetic.main.fragment_trends.daily
+import kotlinx.android.synthetic.main.fragment_trends.weekly
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TrendsFragment : Fragment() {
-
+class CaloriesTrendFragment: Fragment() {
 
     lateinit var db: AppDatabase
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trends, container, false)
+        return inflater.inflate(R.layout.fragment_calories_trend, container, false)
     }
 
 
@@ -50,22 +48,22 @@ class TrendsFragment : Fragment() {
         initDatabase()
 
         //chart Setup
-        weekly_steps_chart.visibility = View.GONE
-        weekly_steps_chart.setTouchEnabled(true)
-        weekly_steps_chart.setPinchZoom(false)
-        weekly_steps_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
-        weekly_steps_chart.setGridBackgroundColor(Color.WHITE)
-        weekly_steps_chart.description.isEnabled = false
-        weekly_steps_chart.axisRight.gridColor = Color.WHITE
-        weekly_steps_chart.axisRight.setDrawLabels(false)
+        weekly_calories_chart.visibility = View.GONE
+        weekly_calories_chart.setTouchEnabled(true)
+        weekly_calories_chart.setPinchZoom(false)
+        weekly_calories_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
+        weekly_calories_chart.setGridBackgroundColor(Color.WHITE)
+        weekly_calories_chart.description.isEnabled = false
+        weekly_calories_chart.axisRight.gridColor = Color.WHITE
+        weekly_calories_chart.axisRight.setDrawLabels(false)
 
-        daily_steps_chart.setTouchEnabled(true)
-        daily_steps_chart.setPinchZoom(false)
-        daily_steps_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
-        daily_steps_chart.setGridBackgroundColor(Color.WHITE)
-        daily_steps_chart.description.isEnabled = false
-        daily_steps_chart.axisRight.gridColor = Color.WHITE
-        daily_steps_chart.axisRight.setDrawLabels(false)
+        daily_calories_chart.setTouchEnabled(true)
+        daily_calories_chart.setPinchZoom(false)
+        daily_calories_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
+        daily_calories_chart.setGridBackgroundColor(Color.WHITE)
+        daily_calories_chart.description.isEnabled = false
+        daily_calories_chart.axisRight.gridColor = Color.WHITE
+        daily_calories_chart.axisRight.setDrawLabels(false)
 
         //Dummy Data For Chart
         val values = ArrayList<Entry>()
@@ -76,24 +74,24 @@ class TrendsFragment : Fragment() {
         values.add(Entry(4f, 300f))
         values.add(Entry(5f, 25000f))
         values.add(Entry(6f, 0f))
-        getSevenDayData(daily_steps_chart)
+        getSevenDayData(daily_calories_chart)
 
         todayStartTimeEndTime()
-        setStepProgressBar(circularProgressBar, todayStartTimeEndTime(), step_desc, current_steps)
+        setCaloriesProgressBar(caloriesProgressBar, todayStartTimeEndTime(), calories_desc, current_calories)
 
         //Radio button set up
         weekly.setOnClickListener {
 
-            daily_steps_chart.visibility = View.INVISIBLE
-            weekly_steps_chart.visibility = View.VISIBLE
-            getWeeklyData(weekly_steps_chart)
+            daily_calories_chart.visibility = View.INVISIBLE
+            weekly_calories_chart.visibility = View.VISIBLE
+            getWeeklyData(weekly_calories_chart)
 
         }
 
         daily.setOnClickListener {
-            daily_steps_chart.visibility = View.VISIBLE
-            weekly_steps_chart.visibility = View.INVISIBLE
-            getSevenDayData(daily_steps_chart)
+            daily_calories_chart.visibility = View.VISIBLE
+            weekly_calories_chart.visibility = View.INVISIBLE
+            getSevenDayData(daily_calories_chart)
         }
 
     }
@@ -126,24 +124,24 @@ class TrendsFragment : Fragment() {
     }
 
 
-    private fun setStepProgressBar(
+    private fun setCaloriesProgressBar(
         circularProgressBar: CircularProgressBar,
         list: ArrayList<Long>,
-        stepDesc: TextView,
-        currentSteps: TextView
+        caloriesDesc: TextView,
+        currentCalories: TextView
     ) {
         if (db?.userDao()?.allFitnessData?.size != 0) {
 
-            var totalSteps: Double = (db?.userDao()?.getStepCount(list[0], list[1]))!!.toDouble()
-            //var totalSteps:Double = 2700.toDouble()
-            Log.v("totalSteps", "" + totalSteps);
-            val goalSteps: Double = (db?.userDao()?.all?.get(0)?.goal_steps!!).toDouble()
-            val stepProgress = (totalSteps?.div(goalSteps!!))?.times(100)
-            circularProgressBar.progress = stepProgress?.toFloat()!!
+            var totalCalories: Double = (db?.userDao()?.getCalorieCount(list[0], list[1]))!!.toDouble()
 
-            currentSteps.setText(totalSteps.toInt().toString())
-            val stepDifference = (goalSteps.minus(totalSteps)).toInt()
-            stepDesc.setText("$stepDifference STEPS TO GO")
+            Log.v("totalCalories", "" + totalCalories);
+            val goalCalories: Double = (db?.userDao()?.all?.get(0)?.goal_calorie!!).toDouble()
+            val caloriesProgress = (totalCalories?.div(goalCalories!!))?.times(100)
+            caloriesProgressBar.progress = caloriesProgress?.toFloat()!!
+
+            currentCalories.setText(totalCalories.toInt().toString())
+            val caloriesDifference = (goalCalories.minus(totalCalories)).toInt()
+            caloriesDesc.setText("$caloriesDifference Kcal/Day")
         }
     }
 
@@ -153,7 +151,7 @@ class TrendsFragment : Fragment() {
         chart.notifyDataSetChanged();
         chart.invalidate();
         chart.clear()
-        val dataList: ArrayList<DateStartEndForGraph> =
+        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEndForGraph> =
             GetDateDetailsStartEndTime().ListOfDaysForGraph(7)
 
         val dataLabel = ArrayList<String>()
@@ -161,11 +159,11 @@ class TrendsFragment : Fragment() {
         var i = 0f
 
         for (data in dataList) {
-            var steps = db?.userDao()?.getStepCount(data.mStartTimeInMili, data.mEndTimeInMili)
+            var calroies = db?.userDao()?.getCalorieCount(data.mStartTimeInMili, data.mEndTimeInMili)
             dataLabel.add(data.wekday)
-            dataValue.add(Entry(i, steps?.toFloat() ?: 0f))
+            dataValue.add(Entry(i, calroies?.toFloat() ?: 0f))
             //  dataValue.add(Entry(i,i.times(200)))
-            i++
+             i++
 
         }
         displayDailyData(chart, dataLabel, dataValue)
@@ -221,14 +219,13 @@ class TrendsFragment : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup
-            var yValues = ArrayList<String>(26)
-            for (i in 0..25) {
+            var yValues = ArrayList<String>(5)
+            for (i in 0..5) {
                 yValues.add(i.times(100).toString())
             }
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter =
-                IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
+           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
@@ -257,15 +254,15 @@ class TrendsFragment : Fragment() {
         chart.notifyDataSetChanged()
         chart.invalidate()
         chart.clear()
-        val dataList: ArrayList<DateStartEnd> = GetDateDetailsStartEndTime().ListOfWeekForGraph(4)
+        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEnd> = GetDateDetailsStartEndTime().ListOfWeekForGraph(4)
         val dataLabel = ArrayList<String>()
         val dataValue = ArrayList<Entry>()
         var i = 0f
 
         for (data in dataList) {
-            var steps = db?.userDao()?.getStepCount(data.mStartTimeInMili, data.mEndTimeInMili)
+            var  calories = db?.userDao()?.getCalorieCount(data.mStartTimeInMili, data.mEndTimeInMili)
             dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, steps?.toFloat() ?: 0f))
+            dataValue.add(Entry(i, calories?.toFloat() ?: 0f))
             // dataValue.add(Entry(i,i.times(200)))
             i++
         }
@@ -326,8 +323,7 @@ class TrendsFragment : Fragment() {
             }
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter =
-                IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
+            yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
             //yAxis.labelCount = 3
@@ -361,4 +357,3 @@ class TrendsFragment : Fragment() {
     }
 
 }
-
