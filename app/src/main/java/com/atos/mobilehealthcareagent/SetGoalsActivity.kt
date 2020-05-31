@@ -12,6 +12,8 @@ class SetGoalsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_goals)
 
+        val getIntent = getIntent()
+
         val data = arrayOfNulls<String>(30)
 
         for (i in 1..30) {
@@ -30,6 +32,11 @@ class SetGoalsActivity : AppCompatActivity() {
 
             val intent = Intent(this,RegistrationActivity::class.java)
             intent.putExtra("Goal",numberPicker.value.times(1000).toString())
+            intent.putExtra("name", getIntent.getStringExtra("name"))
+            intent.putExtra("gender", getIntent.getIntExtra("gender",0))
+            intent.putExtra("dob", getIntent.getStringExtra("dob"))
+            intent.putExtra("height", getIntent.getStringExtra("height"))
+            intent.putExtra("weight", getIntent.getStringExtra("weight"))
             startActivity(intent)
 
         }
