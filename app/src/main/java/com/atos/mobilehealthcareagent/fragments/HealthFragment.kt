@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.DashBoardBuissnessLogic
 import com.atos.mobilehealthcareagent.contract.HealthFragmentInterface
@@ -14,6 +15,7 @@ import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.generated.callback.OnClickListener
 import com.atos.mobilehealthcareagent.presenter.HealthFragmentPresenter
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dashboard.*
 
 
@@ -53,6 +55,31 @@ class HealthFragment : Fragment() ,
         next_button.setOnClickListener {
           todayOperation()
             mHealthFragmentPresenter.getProgressGraph(DashBoardBuissnessLogic().todayStartTimeEndTime())
+        }
+
+        lin_onClickSteps.setOnClickListener() {
+            Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
+            (activity as DashBoard).initialize(0)
+            (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
+        }
+
+        lin_onClickCalorie.setOnClickListener() {
+            Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
+            (activity as DashBoard).initialize(1)
+            (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
+        }
+
+
+        lin_onClickDistance.setOnClickListener() {
+            Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
+            (activity as DashBoard).initialize(2)
+            (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
+        }
+
+        lin_onClickHeartPoint.setOnClickListener() {
+            Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
+            (activity as DashBoard).initialize(3)
+            (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
         }
 
     }

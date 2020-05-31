@@ -7,7 +7,7 @@ import com.atos.mobilehealthcareagent.database.User
 
 interface DashBoardActivityInterface {
     interface DashBoardActivityInterfaceViewInterface {
-        fun initialize()
+        fun initialize(openFragment:Int)
         fun openFragment(fragment: Fragment?)
 
         fun checkuserGoalCreatedOrNot()
