@@ -11,7 +11,6 @@ import com.atos.mobilehealthcareagent.fragments.*
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
 import com.atos.mobilehealthcareagent.presenter.DashBoardActivityPresenter
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
-import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +49,10 @@ class DashBoard : AppCompatActivity(),
 
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
      override fun initLongRunningService() {
         val data = Data.Builder()
             .putString(SecondFragment.KEY_TASK_DESC, "Hey "+ Calendar.getInstance().getTime().toString())
@@ -69,8 +72,11 @@ class DashBoard : AppCompatActivity(),
             ExistingPeriodicWorkPolicy.KEEP,request);
     }
 
-    override fun initialize(){
 
+    companion object var openFragment=0
+    override fun initialize(openFragment:Int){
+
+        this.openFragment=openFragment
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_health -> {
@@ -81,7 +87,7 @@ class DashBoard : AppCompatActivity(),
                 R.id.navigation_trends-> {
                     // Respond to navigation item 2 click
                    // openFragment(TrendsFragment())
-                    openFragment(DistanceTrendFragment())
+                    openTrendFragment(openFragment)
                     // open Profile Fragment
                     var task: BackgroundTask = BackgroundTask(applicationContext)
 
@@ -99,6 +105,18 @@ class DashBoard : AppCompatActivity(),
                 }
                 else -> false
             }
+        }
+
+    }
+
+
+    open fun openTrendFragment(value:Int){
+        when(value){
+            0->openFragment(TrendsFragment())
+            1->openFragment(CaloriesTrendFragment())
+            2->openFragment(DistanceTrendFragment())
+            3->openFragment(HeartPointTrendFragment())
+           // 4->openFragment()
         }
 
     }

@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity(),
     override fun redirectToDashBoard() {
         var intent = Intent(this, DashBoard::class.java)
         startActivity(intent)
+        finish()
     }
 
     override fun init() {
@@ -42,6 +43,7 @@ class LoginActivity : AppCompatActivity(),
     fun onContinueClick(view: View) {
         var intent = Intent(this, RegistrationActivity::class.java)
         startActivity(intent)
+        finish()
 
     }
 

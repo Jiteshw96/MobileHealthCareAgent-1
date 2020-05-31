@@ -119,11 +119,13 @@
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+
                 android:paddingBottom="50dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_onClickSteps"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -262,6 +264,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_onClickCalorie"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -399,6 +402,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_onClickDistance"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -535,6 +539,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_onClickHeartPoint"
                     android:layout_weight="1">
 
                     <LinearLayout
