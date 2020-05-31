@@ -2,6 +2,7 @@ package com.atos.mobilehealthcareagent.googlefit
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -16,6 +17,8 @@ import com.atos.mobilehealthcareagent.fragments.SecondFragment
 import com.atos.mobilehealthcareagent.googlefit.insertvalueintofitapi.InsertStepsFitApi
 import com.atos.mobilehealthcareagent.googlefit.readfitnessapi.ReadFitDataApi
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
@@ -185,7 +188,7 @@ class BackgroundTask {
         }*/
 
         CoroutineScope(Dispatchers.IO).launch {
-
+            readDataDaily()
             var user = UserFitnessData()
             user.firstName = "John"
             user.age = 22
@@ -279,7 +282,7 @@ class BackgroundTask {
                                                 mSeconds,
                                                 context
                                             )
-                                            db.userDao()?.insertAllFitnessData(user)
+                                          //  db.userDao()?.insertAllFitnessData(user)
                                             Log.i(
                                                 "Database Data",
                                                 db.userDao()?.allFitnessData?.size.toString()
@@ -299,7 +302,133 @@ class BackgroundTask {
             }
         }
    }
+    private fun getGoogleAccount() = GoogleSignIn.getAccountForExtension(context.applicationContext, fitnessOptions)
+    fun readDataDaily() {
 
+        var userFitnessData=UserFitnessData()
+        userFitnessData.firstName=db?.userDao()?.all?.get(0)?.firstName
+        userFitnessData.lastName=db?.userDao()?.all?.get(0)?.lastName
+        userFitnessData.age= db?.userDao()?.all?.get(0)?.age!!
+        userFitnessData.fitness_id=db?.userDao()?.allFitnessData?.size!!+1
+        userFitnessData.uid= db?.userDao()?.all?.get(0)?.uid!!
+
+        Fitness.getHistoryClient(context.applicationContext, getGoogleAccount())
+            .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
+            .addOnSuccessListener { dataSet ->
+                val total = when {
+                    dataSet.isEmpty -> 0
+                    else -> {
+                       // steps = dataSet.dataPoints.first().getValue(Field.FIELD_STEPS).asInt()
+                        dataSet.dataPoints.first().getValue(Field.FIELD_STEPS).asInt()
+                    }
+
+                }
+
+                Log.i(ContentValues.TAG, " ------------------ ")
+                Log.i("Success Value", "Total steps: ${total.toDouble()}")
+
+                userFitnessData.steps=total.toDouble()
+                    //////// Calorie
+                Fitness.getHistoryClient(context.applicationContext, getGoogleAccount())
+                    .readDailyTotal(DataType.TYPE_CALORIES_EXPENDED)
+                    .addOnSuccessListener { dataSet ->
+                        val total = when {
+                            dataSet.isEmpty -> 0
+                            else -> (dataSet.dataPoints.first().getValue(Field.FIELD_CALORIES).asFloat()).toInt()
+                        }
+                        Log.i("Success Value", "Total CALORIES: ${total.toDouble()}")
+                        userFitnessData.calorie=total.toDouble()
+
+                    //////////////////// moveminute
+
+                        Fitness.getHistoryClient(context.applicationContext, getGoogleAccount())
+                            .readDailyTotal(DataType.TYPE_MOVE_MINUTES)
+                            .addOnSuccessListener { dataSet ->
+                                val total = when {
+                                    dataSet.isEmpty -> 0
+                                    else -> dataSet.dataPoints.first().getValue(Field.FIELD_DURATION).asInt()
+                                }
+                                Log.i("Success Value", "Total MOVE MINUTES: ${total.toDouble()}")
+                                userFitnessData.moveminute=total.toDouble()
+
+                    /////////////////// Distance
+
+                                Fitness.getHistoryClient(context.applicationContext, getGoogleAccount())
+                                    .readDailyTotal(DataType.TYPE_DISTANCE_DELTA)
+                                    .addOnSuccessListener { dataSet ->
+                                        val total = when {
+                                            dataSet.isEmpty -> 0
+                                            else -> dataSet.dataPoints.first().getValue(Field.FIELD_DISTANCE).asFloat()
+                                        }
+                                        Log.i("Success Value", "Total DISTANCE: ${((total).toString())}")
+
+                                        userFitnessData.distance=((total).toString()).toDouble()
+
+                    /////////////////// Heart Point
+
+                                        Fitness.getHistoryClient(context.applicationContext, getGoogleAccount())
+                                            .readDailyTotal(DataType.TYPE_HEART_POINTS)
+                                            .addOnSuccessListener { dataSet ->
+                                                val total = when {
+                                                    dataSet.isEmpty -> 0
+                                                    else -> dataSet.dataPoints.first().getValue(Field.FIELD_INTENSITY).asFloat()
+                                                }
+                                                Log.i("Success Value", "Heart: ${((total).toString()).toDouble()}")
+                                                userFitnessData.heartpoint=((total).toString()).toDouble()
+
+
+                                                val cal = Calendar.getInstance()
+                                                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                                val s = SimpleDateFormat("yyyy-MM-dd")
+
+                                                var date=s.format(Date(cal.timeInMillis))
+
+                                                var mStartDate=date+" 00:00:01"
+                                                var mStartTimeInMili=sdf.parse(mStartDate)
+
+                                                userFitnessData.timestamp=mStartTimeInMili.time
+
+                                                db.userDao()?.insertAllFitnessData(userFitnessData)
+
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w(ContentValues.TAG, "There was a problem getting the DISTANCE.", e)
+                                            }
+
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(ContentValues.TAG, "There was a problem getting the DISTANCE.", e)
+                                    }
+
+
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "There was a problem getting the MOVE MINUTES count.", e)
+                            }
+
+
+
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(ContentValues.TAG, "There was a problem getting the CALORIES count.", e)
+                    }
+
+
+
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "There was a problem getting the step count.", e)
+            }
+
+
+
+
+
+
+
+
+
+    }
 
 
     fun DataParsingSteps(dataReadResult: DataReadResponse?,fieldName: Field): Double{

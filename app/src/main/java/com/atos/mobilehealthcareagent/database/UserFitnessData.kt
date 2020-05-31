@@ -4,14 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "user_fitness_data")
+@Entity(tableName = "user_fitness_data",primaryKeys = arrayOf("uid", "timestamp"))
 class UserFitnessData {
 
-    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "fitness_id")
     var fitness_id = 0
 
 
-    @ColumnInfo(name = "uid")
+
     var uid = 0
 
     @ColumnInfo(name = "first_name")
@@ -23,7 +23,7 @@ class UserFitnessData {
     @ColumnInfo(name = "age")
     var age = 0
 
-    @ColumnInfo(name = "timestamp")
+
     var timestamp = 0L
 
     @ColumnInfo(name = "steps")
