@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.Settings
 import android.text.InputFilter
 import android.util.Log
@@ -29,6 +30,7 @@ import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import kotlinx.android.synthetic.main.activity_registration.*
+import kotlinx.android.synthetic.main.activity_registration.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -83,13 +85,34 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
         setContentView(R.layout.activity_registration)
         mRegistrationActivityPresenter=RegistrationActivityPresenter(this,this)
 
-        val intent = intent
-        val goalSteps = intent.getStringExtra("Goal")
+        val intent = getIntent()
 
-        if (goalSteps != null) {
-            goal.setText(goalSteps)
+        if(intent.extras != null){
+            name_value.setText(intent.getStringExtra("name"))
+            gender_spinner.setSelection(intent.getIntExtra("gender",0))
+            dob.setText(intent.getStringExtra("dob"))
+            height.setText(intent.getStringExtra("height"))
+            weight.setText(intent.getStringExtra("weight"))
+            name_value.setText(intent.getStringExtra("name"))
+            goal.setText(intent.getStringExtra("Goal"))
         }
     }
+
+
+
+  /*  override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("name", name_value.toString())
+        outState.putString("gender",gender_spinner.toString())
+        outState.putString("dob",dob_lbl.toString())
+        super.onSaveInstanceState(outState)
+    }*/
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        name_value.setText(savedInstanceState.getString("name"))
+    }
+
 
     fun checkuserGoalCreatedOrNot() {
 
@@ -421,8 +444,8 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
 
             var user = User()
-            if (name_lbl.text.trim().length > 0) {
-                user.firstName = name_lbl.text.trim().toString()
+            if (name_value.text.trim().length > 0) {
+                user.firstName = name_value.text.trim().toString()
             }
             else{
                 Toast.makeText(this,"Enter Name",Toast.LENGTH_LONG).show()
@@ -455,7 +478,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                 Toast.makeText(this,"Enter goal",Toast.LENGTH_LONG).show()
             }
 
-            if(name_lbl.text.trim().length > 0 &&
+            if(name_value.text.trim().length > 0 &&
                 dob.text.trim().length > 0 &&
                 height.text.trim().length > 0 &&
                 weight.text.trim().length > 0 &&
@@ -535,6 +558,11 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
                 if(motionEvent?.action == MotionEvent.ACTION_DOWN){
                     var intent = Intent(this,SetGoalsActivity::class.java)
+                    intent.putExtra("name",name_value.text.toString())
+                    intent.putExtra("gender",gender_spinner.selectedItemPosition)
+                    intent.putExtra("dob",dob.text.toString())
+                    intent.putExtra("height",height.text.toString())
+                    intent.putExtra("weight",weight.text.toString())
                     startActivity(intent)
                 }
             }
