@@ -26,7 +26,7 @@ interface UserDao {
 
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllFitnessData(vararg mUsersFitnessData: UserFitnessData): LongArray?
 
     @get:Query("SELECT * FROM user_fitness_data")
