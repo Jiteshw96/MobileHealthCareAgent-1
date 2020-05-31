@@ -60,9 +60,6 @@ class SecondFragment : Fragment(), UserFitnessActivityViewInterface {
 
 
 
-
-
-
         WorkManager.getInstance().enqueue(request)
     }
 }

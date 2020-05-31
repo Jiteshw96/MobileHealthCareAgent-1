@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.atos.mobilehealthcareagent.contract.DashBoardActivityInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
-import com.atos.mobilehealthcareagent.fragments.HealthFragment
-import com.atos.mobilehealthcareagent.fragments.ProfileFragment
-import com.atos.mobilehealthcareagent.fragments.SecondFragment
-import com.atos.mobilehealthcareagent.fragments.TrendsFragment
+import com.atos.mobilehealthcareagent.fragments.*
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
 import com.atos.mobilehealthcareagent.presenter.DashBoardActivityPresenter
 import com.atos.mobilehealthcareagent.service.ServiceInputToDB
@@ -83,7 +80,8 @@ class DashBoard : AppCompatActivity(),
                 }
                 R.id.navigation_trends-> {
                     // Respond to navigation item 2 click
-                    openFragment(TrendsFragment())
+                   // openFragment(TrendsFragment())
+                    openFragment(DistanceTrendFragment())
                     // open Profile Fragment
                     var task: BackgroundTask = BackgroundTask(applicationContext)
 

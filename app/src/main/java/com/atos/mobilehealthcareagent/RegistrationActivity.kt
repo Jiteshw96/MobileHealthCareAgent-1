@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.InputFilter
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +47,7 @@ enum class FitActionRequestCode {
 }
 
 class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
-    RegistrationActivityInterface.RegistrationActivityInterfaceViewInterface {
+    RegistrationActivityInterface.RegistrationActivityInterfaceViewInterface,View.OnTouchListener{
 
     private val fitnessOptions = FitnessOptions.builder()
         .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
@@ -82,6 +83,12 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
         setContentView(R.layout.activity_registration)
         mRegistrationActivityPresenter=RegistrationActivityPresenter(this,this)
 
+        val intent = intent
+        val goalSteps = intent.getStringExtra("Goal")
+
+        if (goalSteps != null) {
+            goal.setText(goalSteps)
+        }
     }
 
     fun checkuserGoalCreatedOrNot() {
@@ -496,12 +503,44 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
 
 
-        dob.setOnClickListener {
+       /* dob.setOnClickListener {
             val datePicker: DialogFragment = DatePickerFragment()
             datePicker.show(supportFragmentManager, "date picker")
         }
+*/
 
+        /*goal.setOnTouchListener { view, motionEvent -> Unit
 
+            var intent = Intent(this,SetGoalsActivity::class.java)
+            startActivity(intent)
+
+        }*/
+
+        dob.setOnTouchListener(this)
+        goal.setOnTouchListener(this)
+    }
+
+    override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
+
+        when(view){
+
+            dob -> {
+                if(motionEvent?.action == MotionEvent.ACTION_DOWN){
+                    val datePicker: DialogFragment = DatePickerFragment()
+                    datePicker.show(supportFragmentManager, "date picker")
+                }
+            }
+
+            goal -> {
+
+                if(motionEvent?.action == MotionEvent.ACTION_DOWN){
+                    var intent = Intent(this,SetGoalsActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+
+        return true
     }
 
 }

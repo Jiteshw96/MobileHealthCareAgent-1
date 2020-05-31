@@ -465,7 +465,7 @@ class ReadFitDataApi(cntx: Context, mFitnessOptions: FitnessOptions){
             Log.i(TAG, "Number of returned DataSets is: " + dataReadResult.dataSets.size)
             dataReadResult.dataSets.forEach { dumpDataSet(it) }
         }
-        Log.i("----------------------------", "-------------------------");
+        Log.i("---------------------", "---------------------");
         // [END parse_read_data_result]
     }
 

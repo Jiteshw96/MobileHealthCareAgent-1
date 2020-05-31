@@ -47,6 +47,7 @@ class HealthFragmentPresenter :
 
         if(mHealthFragmentModel.getFitnessDataCount(db)?.size!!>0){
 
+           // TODO("Check the double type conversion")
             var totalBurnCalorie = mHealthFragmentModel.getCalorieCount(list.get(0), list.get(1),db)
             var totalSteps = mHealthFragmentModel.getStepCount(list.get(0), list.get(1),db)
             var totalDistance = mHealthFragmentModel.getDistanceCount(list.get(0), list.get(1),db)
