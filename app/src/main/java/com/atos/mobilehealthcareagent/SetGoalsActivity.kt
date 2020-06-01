@@ -33,8 +33,8 @@ class SetGoalsActivity : AppCompatActivity() {
         numberPicker.value = 2
         numberPicker.wheelItemCount = 6
 
+        //Set the goal and pass back the values
         set_btn.setOnClickListener{
-
             val intent = Intent(this,RegistrationActivity::class.java)
             intent.putExtra("Goal",data[numberPicker.value-1].toString())
             startActivity(intent)
