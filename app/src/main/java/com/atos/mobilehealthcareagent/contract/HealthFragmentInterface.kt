@@ -15,10 +15,10 @@ interface HealthFragmentInterface {
         fun yestardayIperation()
 
 
-        fun setCalorieProgressGraph(value: Float, toInt: Int)
-        fun setStepProgressGraph(value: Float, toInt: Int)
-        fun setDistanceProgressGraph(value: Float, toInt: Int)
-        fun setHeartPointProgressGraph(value: Float, toInt: Int)
+        fun setCalorieProgressGraph(value: Float, toInt: Int,leftCalorie:Int)
+        fun setStepProgressGraph(value: Float, toInt: Int,leftStep:Int)
+        fun setDistanceProgressGraph(value: Float, toInt: Int,leftDistance:Int)
+        fun setHeartPointProgressGraph(value: Float, toInt: Int,leftHeartPoint:Int)
 
     }
 

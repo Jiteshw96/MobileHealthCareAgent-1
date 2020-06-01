@@ -70,14 +70,18 @@ class HealthFragmentPresenter :
             val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
             val heartPointProgress = (totalHeartoint?.div(goalHeartPont!!))?.times(100)
 
+            var leftSteps= goalSteps?.minus(totalSteps!!)!!.toInt()
+            var leftCalorie= goalCalories?.minus(totalBurnCalorie!!)!!.toInt()
+            var leftDistance= goalDistance?.minus(totalDistance!!)!!.toInt()
+            var leftHeartPoint= goalHeartPont?.minus(totalHeartoint!!)!!.toInt()
 
 
             mHealthFragmentInterfaceViewInterface.setStepProgressGraph(stepProgress?.toFloat()!!,
-                totalSteps!!.toInt())
-            mHealthFragmentInterfaceViewInterface.setCalorieProgressGraph(caloriProgress?.toFloat()!!,totalBurnCalorie!!.toInt())
+                totalSteps!!.toInt(),leftSteps)
+            mHealthFragmentInterfaceViewInterface.setCalorieProgressGraph(caloriProgress?.toFloat()!!,totalBurnCalorie!!.toInt(),leftCalorie)
 
-            mHealthFragmentInterfaceViewInterface.setDistanceProgressGraph(distanceProgress?.toFloat()!!,totalDistance!!.toInt())
-            mHealthFragmentInterfaceViewInterface.setHeartPointProgressGraph(heartPointProgress?.toFloat()!!, totalHeartoint!!.toInt())
+            mHealthFragmentInterfaceViewInterface.setDistanceProgressGraph(distanceProgress?.toFloat()!!,totalDistance!!.toInt(),leftDistance)
+            mHealthFragmentInterfaceViewInterface.setHeartPointProgressGraph(heartPointProgress?.toFloat()!!, totalHeartoint!!.toInt(),leftHeartPoint)
 
         }
 

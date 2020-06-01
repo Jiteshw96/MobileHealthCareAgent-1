@@ -148,21 +148,25 @@ class HealthFragment : Fragment() ,
 //    }
 //
 
-   override fun setStepProgressGraph(value:Float,count:Int){
+   override fun setStepProgressGraph(value:Float,count:Int,leftStep:Int){
         steps_progress_bar.progress=value
        txt_steps_count_progress.text=count.toString()
+       txt_step.text=leftStep.toString()
     }
-    override fun setCalorieProgressGraph(value:Float,count:Int){
+    override fun setCalorieProgressGraph(value:Float,count:Int,leftCalorie:Int){
         calorie_progress_bar.progress=value
         txt_calorie_count_progress.text=count.toString()
+        txt_calorie.text=leftCalorie.toString()
     }
-    override fun setDistanceProgressGraph(value:Float,count:Int){
+    override fun setDistanceProgressGraph(value:Float,count:Int,leftDistance:Int){
         distance_progress_bar.progress=value
         txt_diatance_count_progress.text=(count/1000.0f).toString()
+        txt_distance.text=leftDistance.toString()
     }
-    override fun setHeartPointProgressGraph(value:Float,count:Int){
+    override fun setHeartPointProgressGraph(value:Float,count:Int,leftHeartPoint:Int){
         heart_progress_bar.progress=value
         txt_heart_count_progress.text=count.toString()
+        txt_heart_point.text=leftHeartPoint.toString()
     }
 
 

@@ -52,6 +52,7 @@
                                 android:capitalize="words"
                                 android:gravity="center"
                                 android:text="Today"
+                                android:fontFamily="@font/stag_light"
                                 android:textColor="#ffffff"
                                 android:textSize="25sp">
 
@@ -88,6 +89,7 @@
                                     android:capitalize="words"
                                     android:gravity="center"
                                     android:text="dfdsfdsfsdfsd sdfsdf "
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#ffffff"
                                     android:textSize="15sp" />
 
@@ -157,6 +159,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="STEPS"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -203,7 +206,8 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|bottom"
                                     android:layout_weight="1"
-
+                                    android:textSize="16sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
 
                                 <TextView
@@ -212,6 +216,9 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|top"
                                     android:text="STEPS"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
                             </LinearLayout>
 
@@ -237,13 +244,15 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center|left"
                                     android:text="20"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="STEPS"
+                                    android:text="STEPS TO GO"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -296,6 +305,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="CALORIE"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -342,6 +352,8 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|bottom"
                                     android:layout_weight="1"
+                                    android:textSize="16sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
 
                                 <TextView
@@ -350,6 +362,9 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|top"
                                     android:text="KCAL"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
                             </LinearLayout>
 
@@ -376,6 +391,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center|left"
                                     android:text="520"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                                 <TextView
@@ -383,6 +399,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="Kcal To BURN"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -434,6 +451,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="DISTANCE"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -480,6 +498,8 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|bottom"
                                     android:layout_weight="1"
+                                    android:textSize="16sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
 
                                 <TextView
@@ -488,6 +508,9 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|top"
                                     android:text="KM"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
                             </LinearLayout>
 
@@ -514,6 +537,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center|left"
                                     android:text="52"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                                 <TextView
@@ -521,6 +545,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="KM To GO"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -571,6 +596,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="HEART POINT"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
@@ -617,6 +643,8 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|bottom"
                                     android:layout_weight="1"
+                                    android:textSize="16sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
 
                                 <TextView
@@ -625,6 +653,9 @@
                                     android:layout_height="match_parent"
                                     android:gravity="center|top"
                                     android:text="POINT"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/stag_light"
                                     android:textColor="#ffffff" />
                             </LinearLayout>
 
@@ -649,14 +680,16 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|left"
-                                    android:text="5 HEART POINT "
+                                    android:text="5  "
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|left"
-                                    android:text="TO ACHIVE"
+                                    android:text="POINT TO ACHIVE"
+                                    android:fontFamily="@font/stag_thin"
                                     android:textColor="#FFFFFF" />
 
                             </LinearLayout>
