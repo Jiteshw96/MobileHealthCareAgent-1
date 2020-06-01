@@ -8,6 +8,8 @@ import com.atos.mobilehealthcareagent.contract.HealthFragmentInterface.HealthFra
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.model.HealthFragmentModel
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class HealthFragmentPresenter :
     HealthFragmentInterface.HealthFragmentInterfacePresenterInterface {
@@ -70,14 +72,30 @@ class HealthFragmentPresenter :
             val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
             val heartPointProgress = (totalHeartoint?.div(goalHeartPont!!))?.times(100)
 
+            var leftSteps= goalSteps?.minus(totalSteps!!)!!.toInt()
+            var leftCalorie= goalCalories?.minus(totalBurnCalorie!!)!!.toInt()
+            var leftDistance= goalDistance?.minus(totalDistance!!)!!.toInt()
+            var leftHeartPoint= goalHeartPont?.minus(totalHeartoint!!)!!.toInt()
 
+            if (leftSteps<=0) leftSteps=0
+            if (leftCalorie<=0) leftCalorie=0
+            if (leftDistance<=0) leftDistance=0
+            if (leftHeartPoint<=0) leftHeartPoint=0
+
+
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            var distanceInKm= df.format((totalDistance!!/1000.0f))
+            var leftDistanceInKm=((goalDistance!!/1000.0f)-df.format((totalDistance!!/1000.0f)).toFloat()).toString()
+            if((leftDistanceInKm).toFloat()<=0)
+                leftDistanceInKm="0"
 
             mHealthFragmentInterfaceViewInterface.setStepProgressGraph(stepProgress?.toFloat()!!,
-                totalSteps!!.toInt())
-            mHealthFragmentInterfaceViewInterface.setCalorieProgressGraph(caloriProgress?.toFloat()!!,totalBurnCalorie!!.toInt())
+                totalSteps!!.toInt(),leftSteps)
+            mHealthFragmentInterfaceViewInterface.setCalorieProgressGraph(caloriProgress?.toFloat()!!,totalBurnCalorie!!.toInt(),leftCalorie)
 
-            mHealthFragmentInterfaceViewInterface.setDistanceProgressGraph(distanceProgress?.toFloat()!!,totalDistance!!.toInt())
-            mHealthFragmentInterfaceViewInterface.setHeartPointProgressGraph(heartPointProgress?.toFloat()!!, totalHeartoint!!.toInt())
+            mHealthFragmentInterfaceViewInterface.setDistanceProgressGraph(distanceProgress?.toFloat()!!,distanceInKm,leftDistanceInKm)
+            mHealthFragmentInterfaceViewInterface.setHeartPointProgressGraph(heartPointProgress?.toFloat()!!, totalHeartoint!!.toInt(),leftHeartPoint)
 
         }
 

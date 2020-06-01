@@ -1,18 +1,17 @@
 package com.atos.mobilehealthcareagent
 
+import android.content.Context
 import android.content.Intent
+import android.media.audiofx.BassBoost
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.PowerManager
+import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.atos.mobilehealthcareagent.contract.LoginActivityInterface
-import com.atos.mobilehealthcareagent.database.AppDatabase
-import com.atos.mobilehealthcareagent.database.Goal
 import com.atos.mobilehealthcareagent.presenter.LoginActivityPresenter
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.reflect.Field
 
 
 class LoginActivity : AppCompatActivity(),
@@ -25,7 +24,6 @@ class LoginActivity : AppCompatActivity(),
 
 
         LoginActivityPresenter = LoginActivityPresenter(this, this)
-
 
     }
 
@@ -49,6 +47,22 @@ class LoginActivity : AppCompatActivity(),
 
     override fun initilizeContentView() {
         setContentView(R.layout.activity_login)
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent()
+            val packageName = packageName
+            val pm =
+                getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.action = ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
+            }
+        }
+
+
     }
 
 

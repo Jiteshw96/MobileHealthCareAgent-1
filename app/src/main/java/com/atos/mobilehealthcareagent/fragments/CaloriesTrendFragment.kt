@@ -29,9 +29,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CaloriesTrendFragment: Fragment() {
+class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
+    var today=true
+    init {
+        this.today=today
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

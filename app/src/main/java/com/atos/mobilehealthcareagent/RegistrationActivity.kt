@@ -553,6 +553,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                     intent.putExtra("height",height.text.toString())
                     intent.putExtra("weight",weight.text.toString())
                     startActivity(intent)
+                    finish()
                 }
             }
         }

@@ -17,6 +17,8 @@ import com.atos.mobilehealthcareagent.presenter.HealthFragmentPresenter
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dashboard.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 class HealthFragment : Fragment() ,
@@ -59,26 +61,26 @@ class HealthFragment : Fragment() ,
 
         lin_onClickSteps.setOnClickListener() {
             Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
-            (activity as DashBoard).initialize(0)
+            (activity as DashBoard).initialize(0,today)
             (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
         }
 
         lin_onClickCalorie.setOnClickListener() {
             Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
-            (activity as DashBoard).initialize(1)
+            (activity as DashBoard).initialize(1,today)
             (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
         }
 
 
         lin_onClickDistance.setOnClickListener() {
             Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
-            (activity as DashBoard).initialize(2)
+            (activity as DashBoard).initialize(2,today)
             (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
         }
 
         lin_onClickHeartPoint.setOnClickListener() {
             Log.e("sdsdsdssd",(activity as DashBoard).bottom_navigation.toString())
-            (activity as DashBoard).initialize(3)
+            (activity as DashBoard).initialize(3,today)
             (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_trends
         }
 
@@ -148,21 +150,29 @@ class HealthFragment : Fragment() ,
 //    }
 //
 
-   override fun setStepProgressGraph(value:Float,count:Int){
+   override fun setStepProgressGraph(value:Float,count:Int,leftStep:Int){
         steps_progress_bar.progress=value
        txt_steps_count_progress.text=count.toString()
+       txt_step.text=leftStep.toString()
     }
-    override fun setCalorieProgressGraph(value:Float,count:Int){
+    override fun setCalorieProgressGraph(value:Float,count:Int,leftCalorie:Int){
         calorie_progress_bar.progress=value
         txt_calorie_count_progress.text=count.toString()
+        txt_calorie.text=leftCalorie.toString()
     }
-    override fun setDistanceProgressGraph(value:Float,count:Int){
+    override fun setDistanceProgressGraph(value:Float,count:String,leftDistance:String){
+
+
         distance_progress_bar.progress=value
-        txt_diatance_count_progress.text=(count/1000.0f).toString()
+        txt_diatance_count_progress.text=count
+
+
+        txt_distance.text=leftDistance
     }
-    override fun setHeartPointProgressGraph(value:Float,count:Int){
+    override fun setHeartPointProgressGraph(value:Float,count:Int,leftHeartPoint:Int){
         heart_progress_bar.progress=value
         txt_heart_count_progress.text=count.toString()
+        txt_heart_point.text=leftHeartPoint.toString()
     }
 
 
