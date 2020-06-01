@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HeartPointTrendFragment: Fragment() {
+class HeartPointTrendFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
 

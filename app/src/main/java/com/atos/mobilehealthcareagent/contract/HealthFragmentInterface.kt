@@ -17,7 +17,7 @@ interface HealthFragmentInterface {
 
         fun setCalorieProgressGraph(value: Float, toInt: Int,leftCalorie:Int)
         fun setStepProgressGraph(value: Float, toInt: Int,leftStep:Int)
-        fun setDistanceProgressGraph(value: Float, toInt: Int,leftDistance:Int)
+        fun setDistanceProgressGraph(value: Float, totalDistance: String,leftDistance:String)
         fun setHeartPointProgressGraph(value: Float, toInt: Int,leftHeartPoint:Int)
 
     }

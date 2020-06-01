@@ -22,7 +22,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.android.synthetic.main.fragment_distance_trend.*
 import kotlinx.android.synthetic.main.fragment_trends.daily
 import kotlinx.android.synthetic.main.fragment_trends.weekly
@@ -30,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DistanceTrendFragment: Fragment() {
+class DistanceTrendFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
 

@@ -29,10 +29,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TrendsFragment : Fragment() {
+class TrendsFragment(today: Boolean) : Fragment() {
 
 
     lateinit var db: AppDatabase
+
 
 
     override fun onCreateView(

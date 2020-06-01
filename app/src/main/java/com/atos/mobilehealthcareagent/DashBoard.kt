@@ -74,7 +74,7 @@ class DashBoard : AppCompatActivity(),
 
 
     companion object var openFragment=0
-    override fun initialize(openFragment:Int){
+    override fun initialize(openFragment:Int,today:Boolean){
 
         this.openFragment=openFragment
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
@@ -87,7 +87,7 @@ class DashBoard : AppCompatActivity(),
                 R.id.navigation_trends-> {
                     // Respond to navigation item 2 click
                    // openFragment(TrendsFragment())
-                    openTrendFragment(openFragment)
+                    openTrendFragment(openFragment,today)
                     // open Profile Fragment
                     var task: BackgroundTask = BackgroundTask(applicationContext)
 
@@ -110,12 +110,12 @@ class DashBoard : AppCompatActivity(),
     }
 
 
-    open fun openTrendFragment(value:Int){
+    open fun openTrendFragment(value:Int,today:Boolean){
         when(value){
-            0->openFragment(TrendsFragment())
-            1->openFragment(CaloriesTrendFragment())
-            2->openFragment(DistanceTrendFragment())
-            3->openFragment(HeartPointTrendFragment())
+            0->openFragment(TrendsFragment(today))
+            1->openFragment(CaloriesTrendFragment(today))
+            2->openFragment(DistanceTrendFragment(today))
+            3->openFragment(HeartPointTrendFragment(today))
            // 4->openFragment()
         }
 
