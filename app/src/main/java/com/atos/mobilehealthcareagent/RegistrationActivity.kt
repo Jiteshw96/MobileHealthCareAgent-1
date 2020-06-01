@@ -99,22 +99,8 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
     }
 
 
+    override fun checkuserGoalCreatedOrNot() {
 
-  /*  override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("name", name_value.toString())
-        outState.putString("gender",gender_spinner.toString())
-        outState.putString("dob",dob_lbl.toString())
-        super.onSaveInstanceState(outState)
-    }*/
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        name_value.setText(savedInstanceState.getString("name"))
-    }
-
-
-    fun checkuserGoalCreatedOrNot() {
 
         db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase
 
@@ -289,6 +275,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                     Log.i(TAG, "Successfully subscribed!")
                     var intent= Intent(this, DashBoard::class.java)
                     startActivity(intent)
+                    finish()
                 } else {
                     Log.w(TAG, "There was a problem subscribing.", task.exception)
                 }
@@ -484,7 +471,9 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                 weight.text.trim().length > 0 &&
                 goal.text.trim().length > 0  ){
 
-                mRegistrationActivityPresenter.saveUser(user)
+                db?.userDao()?.getGoalValue(7000)
+
+                mRegistrationActivityPresenter.saveUser(user,(goal.text.trim().toString()).toLong())
             }
             else{
                 Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()

@@ -26,7 +26,7 @@ class DashBoardActivityPresenter :
     }
 
     override fun initialize() {
-        mDashBoardActivityInterfaceViewInterface.initialize()
+        mDashBoardActivityInterfaceViewInterface.initialize(0)
         mDashBoardActivityInterfaceViewInterface.openFragment(HealthFragment())
         mDashBoardActivityInterfaceViewInterface.checkuserGoalCreatedOrNot()
         mDashBoardActivityInterfaceViewInterface.initLongRunningService()
