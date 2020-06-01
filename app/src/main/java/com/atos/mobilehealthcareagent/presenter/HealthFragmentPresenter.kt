@@ -87,6 +87,8 @@ class HealthFragmentPresenter :
             df.roundingMode = RoundingMode.CEILING
             var distanceInKm= df.format((totalDistance!!/1000.0f))
             var leftDistanceInKm=((goalDistance!!/1000.0f)-df.format((totalDistance!!/1000.0f)).toFloat()).toString()
+            if((leftDistanceInKm).toFloat()<=0)
+                leftDistanceInKm="0"
 
             mHealthFragmentInterfaceViewInterface.setStepProgressGraph(stepProgress?.toFloat()!!,
                 totalSteps!!.toInt(),leftSteps)

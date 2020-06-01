@@ -34,6 +34,10 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
 
+    var today=true
+    init {
+        this.today=today
+    }
 
 
     override fun onCreateView(
