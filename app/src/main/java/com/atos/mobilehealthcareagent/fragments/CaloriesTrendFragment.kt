@@ -81,6 +81,7 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
         getSevenDayData(daily_calories_chart)
 
         todayStartTimeEndTime()
+        // TODO("Call Yesterday or today based on variable")
         setCaloriesProgressBar(caloriesProgressBar, todayStartTimeEndTime(), calories_desc, current_calories)
 
         //Radio button set up
@@ -144,7 +145,7 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             caloriesProgressBar.progress = caloriesProgress?.toFloat()!!
 
             currentCalories.setText(totalCalories.toInt().toString())
-            val caloriesDifference = (goalCalories.minus(totalCalories)).toInt()
+            val caloriesDifference = (goalCalories.minus(totalCalories)).div(7).toInt()
             caloriesDesc.setText("$caloriesDifference Kcal/Day")
         }
     }

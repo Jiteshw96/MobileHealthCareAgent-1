@@ -15,16 +15,16 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
             android:background="@color/transparent"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/caloriesProgressBar"
             android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="32dp"
@@ -34,6 +34,7 @@
             app:cpb_progressbar_color="@color/white"
             app:cpb_progressbar_width="5dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.27"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,18 +54,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/stag_book"
                 android:text="90.5"
                 android:textColor="@color/white"
-                android:textSize="52sp"></TextView>
+                android:textSize="32sp"></TextView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/stag_book"
                 android:text="KCAL"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="24sp"></TextView>
+                android:textSize="16sp"></TextView>
         </LinearLayout>
 
         <TextView
@@ -72,10 +75,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/stag_medium"
             android:text="Today"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/caloriesProgressBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,12 +89,13 @@
             android:id="@+id/calories_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/stag_book"
             android:gravity="center|center_horizontal"
             android:text="5300 KCal/Day"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/caloriesProgressBar" />
@@ -101,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/togglebackground"
             android:checkedButton="@+id/daily"
@@ -117,8 +122,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/toggle_widget_background"
                 android:button="@null"
+                android:fontFamily="@font/stag_book"
                 android:gravity="center"
-                android:text="Daily"
+                android:text="Day"
                 android:textAllCaps="true"
                 android:textColor="@color/white" />
 
@@ -129,8 +135,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/toggle_widget_background"
                 android:button="@null"
+                android:fontFamily="@font/stag_book"
                 android:gravity="center"
-                android:text="Weekly"
+                android:text="Week"
                 android:textAllCaps="true"
                 android:textColor="@color/white" />
         </RadioGroup>
@@ -142,7 +149,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="55dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -155,7 +162,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="55dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
