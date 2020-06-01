@@ -37,6 +37,12 @@ class SetGoalsActivity : AppCompatActivity() {
         set_btn.setOnClickListener{
             val intent = Intent(this,RegistrationActivity::class.java)
             intent.putExtra("Goal",data[numberPicker.value-1].toString())
+
+            intent.putExtra("name", getIntent().getStringExtra("name"))
+            intent.putExtra("gender", getIntent().getIntExtra("gender",0))
+            intent.putExtra("dob", getIntent().getStringExtra("dob"))
+            intent.putExtra("height", getIntent().getStringExtra("height"))
+            intent.putExtra("weight", getIntent().getStringExtra("weight"))
             startActivity(intent)
             finish()
 
