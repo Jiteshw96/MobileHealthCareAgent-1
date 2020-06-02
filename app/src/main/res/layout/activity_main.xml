@@ -18,8 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:background="#DDA0DD"
-
+            android:background="@drawable/ic_footer_bg"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:itemIconTint="@color/bottom_nav_color"
+            android:theme="@style/BottomNavigationViewTextStyle"
             app:menu="@menu/bottom_navigation_menu" />
 
 
