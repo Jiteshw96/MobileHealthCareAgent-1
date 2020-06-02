@@ -155,7 +155,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         for (data in dataList) {
             var distance = db?.userDao()?.getDistanceCount(data.mStartTimeInMili, data.mEndTimeInMili)
             dataLabel.add(data.wekday)
-            dataValue.add(Entry(i, distance?.toFloat() ?: 0f))
+            dataValue.add(Entry(i, ((distance?.toFloat() ?: 0f)/1000.0).toFloat()    ))
             //  dataValue.add(Entry(i,i.times(200)))
             i++
 
@@ -223,7 +223,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
             yAxis.axisMinimum = 0f
-            yAxis.axisMaximum = 30f
+           // yAxis.axisMaximum = 30f
             yAxis.labelCount = 3
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
@@ -258,7 +258,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         for (data in dataList) {
             var distance = db?.userDao()?.getDistanceCount(data.mStartTimeInMili, data.mEndTimeInMili)
             dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, distance?.toFloat() ?: 0f))
+            dataValue.add(Entry(i, ((distance?.toFloat() ?: 0f)/1000.0).toFloat()     ))
             // dataValue.add(Entry(i,i.times(200)))
             i++
         }
@@ -325,7 +325,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
-            yAxis.axisMaximum = 200f
+          //  yAxis.axisMaximum = 200f
             yAxis.axisMinimum = 0f
             yAxis.labelCount = 3
             //yAxis.setDrawGridLines(true)

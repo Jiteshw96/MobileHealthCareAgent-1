@@ -1,9 +1,12 @@
 package com.atos.mobilehealthcareagent.googlefit
 
+import android.util.Log
+
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class GetDateDetailsStartEndTime {
 
@@ -312,7 +315,17 @@ class GetDateDetailsStartEndTime {
             c.add(Calendar.DATE,-6)
         }
 
-    return mWeek
+
+    var reversedList= ArrayList<DateStartEnd>()
+
+        for (i in mWeek.size downTo 1) {
+            reversedList.add(mWeek.get(i-1))
+            Log.e("sdssd","asas")
+        }
+
+
+
+    return reversedList
 
     }
 
