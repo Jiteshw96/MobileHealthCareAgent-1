@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
+import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
 import com.github.mikephil.charting.charts.LineChart
@@ -25,6 +26,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.fragment_distance_trend.*
 import kotlinx.android.synthetic.main.fragment_trends.daily
 import kotlinx.android.synthetic.main.fragment_trends.weekly
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +34,7 @@ import kotlin.collections.ArrayList
 class DistanceTrendFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
+     val df = DecimalFormat("#.##")
 
     var today=true
     init {
@@ -54,15 +57,16 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
 
         //chart Setup
         weekly_distance_chart.visibility = View.GONE
-        weekly_distance_chart.setTouchEnabled(true)
+        weekly_distance_chart.setTouchEnabled(false)
         weekly_distance_chart.setPinchZoom(false)
         weekly_distance_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         weekly_distance_chart.setGridBackgroundColor(Color.WHITE)
         weekly_distance_chart.description.isEnabled = false
         weekly_distance_chart.axisRight.gridColor = Color.WHITE
         weekly_distance_chart.axisRight.setDrawLabels(false)
+        weekly_distance_chart.extraRightOffset = 22f
 
-        daily_distance_chart.setTouchEnabled(true)
+        daily_distance_chart.setTouchEnabled(false)
         daily_distance_chart.setPinchZoom(false)
         daily_distance_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         daily_distance_chart.setGridBackgroundColor(Color.WHITE)
@@ -81,8 +85,14 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         values.add(Entry(6f, 0f))
         getSevenDayData(daily_distance_chart)
 
-        todayStartTimeEndTime()
-        setDistanceProgressBar(distanceProgressBar, todayStartTimeEndTime(), distance_desc, current_distance)
+        if(today){
+            setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), distance_desc, current_distance)
+            day_label.setText("Today")
+        }else{
+            setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), distance_desc, current_distance)
+            day_label.setText("Yesterday")
+        }
+
 
         //Radio button set up
         weekly.setOnClickListener {
@@ -107,28 +117,6 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
 
     }
 
-    //Get Time for Today
-    fun getToday(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-        val date = Date()
-        return formatter.format(date)
-    }
-
-    fun todayStartTimeEndTime(): ArrayList<Long> {
-        var returnValue = ArrayList<Long>()
-        val myStartDate = getToday() + " 00:00:01"
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = sdf.parse(myStartDate)
-        val startMilisecond = date.time
-        returnValue.add(startMilisecond)
-        val myEndDate = getToday() + " 23:59:59"
-        val Enddate = sdf.parse(myEndDate)
-        val endtMilisecond = Enddate.time
-        returnValue.add(endtMilisecond)
-        return returnValue
-    }
-
-
     private fun setDistanceProgressBar(
         circularProgressBar: CircularProgressBar,
         list: ArrayList<Long>,
@@ -142,11 +130,12 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             Log.v("totalDistance", "" + totalDistance);
             val goalDistance: Double = (db?.userDao()?.all?.get(0)?.goal_distance!!).toDouble()
             val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
-            distanceProgressBar.progress = distanceProgress?.toFloat()!!
-
-            currentDistance.setText(totalDistance.toInt().toString())
             val distanceDifference = (goalDistance.minus(totalDistance)).toInt()
-            distanceDesc.setText("$distanceDifference KM/Day")
+            val totalDistanceInKm =  df.format((totalDistance!!/1000.0f))
+            var differenceDistanceInKm= df.format((distanceDifference!!/1000.0f))
+            distanceProgressBar.progress = distanceProgress?.toFloat()!!
+            currentDistance.setText(totalDistanceInKm.toString())
+            distanceDesc.setText("$differenceDistanceInKm Km to Go")
         }
     }
 
@@ -209,7 +198,6 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
                 set.fillColor = Color.DKGRAY
             }
 
-
             //Dummy Values for X-axis
             //  val xValues = arrayOf("S", "M", "T", "W", "T", "F", "S")
             val xValues = dataLabel
@@ -220,20 +208,23 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup
-            var yValues = ArrayList<String>(5)
+          /*  var yValues = ArrayList<String>(5)
             for (i in 0..5) {
                 yValues.add(i.times(100).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
+          //  yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
+            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 30f
+            yAxis.labelCount = 3
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
             //yAxis.setDrawGridLines(true)
@@ -265,15 +256,16 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         var i = 0f
 
         for (data in dataList) {
-            var heartPoint = db?.userDao()?.getHeartPointCount(data.mStartTimeInMili, data.mEndTimeInMili)
+            var distance = db?.userDao()?.getDistanceCount(data.mStartTimeInMili, data.mEndTimeInMili)
             dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, heartPoint?.toFloat() ?: 0f))
+            dataValue.add(Entry(i, distance?.toFloat() ?: 0f))
             // dataValue.add(Entry(i,i.times(200)))
             i++
         }
         displayWeeklyChart(chart, dataLabel, dataValue)
     }
 
+    //TODO Distance m to km
     //Display weekly ChartData
     private fun displayWeeklyChart(
         mChart: LineChart,
@@ -317,22 +309,24 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.labelCount = 3
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.xOffset = 10f
             xAxis.yOffset = 10f
 
-            //YAxis Setup Values Setup
+           /* //YAxis Setup Values Setup
             var yValues = ArrayList<String>(3)
             for (i in 0..3) {
                 yValues.add(i.times(10).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
+           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
+            yAxis.axisMaximum = 200f
+            yAxis.axisMinimum = 0f
             yAxis.labelCount = 3
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)

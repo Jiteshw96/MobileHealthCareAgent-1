@@ -421,13 +421,6 @@ class BackgroundTask {
             }
 
 
-
-
-
-
-
-
-
     }
 
 
@@ -448,9 +441,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-                displayNotification("Data", totalData.toString())
+              //  displayNotification("Data", totalData.toString())
             }else{
-                displayNotification("Data", "No Record")
+                //displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -473,9 +466,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-                displayNotification("Data", totalData.toString())
+              //  displayNotification("Data", totalData.toString())
             }else{
-                displayNotification("Data", "No Record")
+                //displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -498,9 +491,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-                displayNotification("Data", totalData.toString())
+              //  displayNotification("Data", totalData.toString())
             }else{
-                displayNotification("Data", "No Record")
+               // displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -522,9 +515,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-                displayNotification("Data", totalData.toString())
+               // displayNotification("Data", totalData.toString())
             }else{
-                displayNotification("Data", "No Record")
+              //  displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -546,9 +539,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-                displayNotification("Data", totalData.toString())
+               // displayNotification("Data", totalData.toString())
             }else{
-                displayNotification("Data", "No Record")
+                //displayNotification("Data", "No Record")
             }
         }
         return  totalData
