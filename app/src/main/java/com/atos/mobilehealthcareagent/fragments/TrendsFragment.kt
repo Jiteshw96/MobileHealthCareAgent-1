@@ -330,7 +330,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
             yAxis.setDrawLabels(true)
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
-          //  yAxis.labelCount = 3
+            yAxis.labelCount = 3
             yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
 
             //Set the Data
