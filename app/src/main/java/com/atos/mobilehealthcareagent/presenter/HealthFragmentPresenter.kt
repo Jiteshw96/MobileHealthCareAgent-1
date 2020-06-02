@@ -86,7 +86,9 @@ class HealthFragmentPresenter :
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.CEILING
             var distanceInKm= df.format((totalDistance!!/1000.0f))
-            var leftDistanceInKm=((goalDistance!!/1000.0f)-df.format((totalDistance!!/1000.0f)).toFloat()).toString()
+            val dformat = DecimalFormat("#.##")
+            //dformat.format()
+            var leftDistanceInKm=dformat.format(((goalDistance!!/1000.0f)-df.format((totalDistance!!/1000.0f)).toFloat())).toString()
             if((leftDistanceInKm).toFloat()<=0)
                 leftDistanceInKm="0"
 
