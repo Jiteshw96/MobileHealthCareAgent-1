@@ -540,7 +540,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
                 if(motionEvent?.action == MotionEvent.ACTION_DOWN){
                     var intent = Intent(this,SetGoalsActivity::class.java)
-                    intent.putExtra("ClassFrom",RegistrationActivity::class.java)
+                    intent.putExtra("ClassFrom","RegistrationActivity")
                     intent.putExtra("name",name_value.text.toString())
                     intent.putExtra("gender",gender_spinner.selectedItemPosition)
                     intent.putExtra("dob",dob.text.toString())

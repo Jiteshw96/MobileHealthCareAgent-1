@@ -1,10 +1,13 @@
 package com.atos.mobilehealthcareagent
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.atos.mobilehealthcareagent.fitnessharedpreferences.GoalSharedPreferences
 import com.shawnlin.numberpicker.NumberPicker
 import kotlinx.android.synthetic.main.activity_set_goals.*
+
 
 class SetGoalsActivity : AppCompatActivity() {
 
@@ -35,16 +38,24 @@ class SetGoalsActivity : AppCompatActivity() {
 
         //Set the goal and pass back the values
         set_btn.setOnClickListener{
-            val callingActivity = getIntent().getStringExtra("ClassFrom")
-                val intent = Intent(this,RegistrationActivity::class.java)
-                intent.putExtra("Goal",data[numberPicker.value-1].toString())
+            val callingActivity = getIntent()?.getStringExtra("ClassFrom")
+            if(callingActivity!=null && callingActivity?.equals("RegistrationActivity")!!) {
+                val intent = Intent(this, RegistrationActivity::class.java)
+                intent.putExtra("Goal", data[numberPicker.value - 1].toString())
                 intent.putExtra("name", getIntent().getStringExtra("name"))
-                intent.putExtra("gender", getIntent().getIntExtra("gender",0))
+                intent.putExtra("gender", getIntent().getIntExtra("gender", 0))
                 intent.putExtra("dob", getIntent().getStringExtra("dob"))
                 intent.putExtra("height", getIntent().getStringExtra("height"))
                 intent.putExtra("weight", getIntent().getStringExtra("weight"))
                 startActivity(intent)
                 finish()
+            }
+            if(callingActivity==null){
+                GoalSharedPreferences().setGoal(data[numberPicker.value - 1].toString(), applicationContext)
+
+
+                finish()
+            }
             }
 
         }
