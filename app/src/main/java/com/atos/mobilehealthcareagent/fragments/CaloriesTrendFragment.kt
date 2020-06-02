@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
+import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
 import com.github.mikephil.charting.charts.LineChart
@@ -23,8 +24,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.fragment_calories_trend.*
-import kotlinx.android.synthetic.main.fragment_trends.daily
-import kotlinx.android.synthetic.main.fragment_trends.weekly
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +31,7 @@ import kotlin.collections.ArrayList
 class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
     lateinit var db: AppDatabase
+    lateinit var trendsBusinessLogic: TrendsBusinessLogic
     var today=true
     init {
         this.today=today
@@ -53,15 +53,16 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
         //chart Setup
         weekly_calories_chart.visibility = View.GONE
-        weekly_calories_chart.setTouchEnabled(true)
+        weekly_calories_chart.setTouchEnabled(false)
         weekly_calories_chart.setPinchZoom(false)
         weekly_calories_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         weekly_calories_chart.setGridBackgroundColor(Color.WHITE)
         weekly_calories_chart.description.isEnabled = false
         weekly_calories_chart.axisRight.gridColor = Color.WHITE
         weekly_calories_chart.axisRight.setDrawLabels(false)
+        weekly_calories_chart.extraRightOffset = 22f
 
-        daily_calories_chart.setTouchEnabled(true)
+        daily_calories_chart.setTouchEnabled(false)
         daily_calories_chart.setPinchZoom(false)
         daily_calories_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         daily_calories_chart.setGridBackgroundColor(Color.WHITE)
@@ -80,9 +81,15 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
         values.add(Entry(6f, 0f))
         getSevenDayData(daily_calories_chart)
 
-        todayStartTimeEndTime()
-        // TODO("Call Yesterday or today based on variable")
-        setCaloriesProgressBar(caloriesProgressBar, todayStartTimeEndTime(), calories_desc, current_calories)
+        if(today){
+            setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), calories_desc, current_calories)
+            day_label.setText("Today")
+
+        } else{
+            setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), calories_desc, current_calories)
+            day_label.setText("Yesterday")
+        }
+
 
         //Radio button set up
         weekly.setOnClickListener {
@@ -145,8 +152,8 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             caloriesProgressBar.progress = caloriesProgress?.toFloat()!!
 
             currentCalories.setText(totalCalories.toInt().toString())
-            val caloriesDifference = (goalCalories.minus(totalCalories)).div(7).toInt()
-            caloriesDesc.setText("$caloriesDifference Kcal/Day")
+            val caloriesDifference = (goalCalories.minus(totalCalories)).toInt()
+            caloriesDesc.setText("$caloriesDifference Kcal To Burn")
         }
     }
 
@@ -220,15 +227,15 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            //YAxis Setup
+          /*  //YAxis Setup
             var yValues = ArrayList<String>(5)
             for (i in 0..5) {
                 yValues.add(i.times(100).toString())
             }
-
+*/
             val yAxis = mChart.axisLeft
            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
 
@@ -317,21 +324,26 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.labelCount = 3
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup Values Setup
-            var yValues = ArrayList<String>(3)
-            for (i in 0..3) {
-                yValues.add(i.times(10000).toString())
-            }
+          /*  var yValues = ArrayList<String>(4)
+            for (i in 0..4) {
+                yValues.add(i.times(1000).toString())
+            }*/
+
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
+           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
+            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 10000f
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
-            //yAxis.labelCount = 3
+            //yAxis.labelCount = 4
+            yAxis.setLabelCount(5,true)
+           // yAxis.granularity = 4f
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE

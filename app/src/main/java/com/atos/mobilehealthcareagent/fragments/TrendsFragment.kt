@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
+import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime.DateStartEnd
@@ -56,15 +57,16 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
         //chart Setup
         weekly_steps_chart.visibility = View.GONE
-        weekly_steps_chart.setTouchEnabled(true)
+        weekly_steps_chart.setTouchEnabled(false)
         weekly_steps_chart.setPinchZoom(false)
         weekly_steps_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         weekly_steps_chart.setGridBackgroundColor(Color.WHITE)
         weekly_steps_chart.description.isEnabled = false
         weekly_steps_chart.axisRight.gridColor = Color.WHITE
         weekly_steps_chart.axisRight.setDrawLabels(false)
+        weekly_steps_chart.extraRightOffset = 22f
 
-        daily_steps_chart.setTouchEnabled(true)
+        daily_steps_chart.setTouchEnabled(false)
         daily_steps_chart.setPinchZoom(false)
         daily_steps_chart.setBackgroundColor(Color.parseColor("#99BABABA"))
         daily_steps_chart.setGridBackgroundColor(Color.WHITE)
@@ -83,8 +85,14 @@ class TrendsFragment(today: Boolean) : Fragment() {
         values.add(Entry(6f, 0f))
         getSevenDayData(daily_steps_chart)
 
-        todayStartTimeEndTime()
-        setStepProgressBar(circularProgressBar, todayStartTimeEndTime(), step_desc, current_steps)
+        if(today){
+            setStepProgressBar(circularProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), step_desc, current_steps)
+            day_label.setText("Today")
+        }else{
+            setStepProgressBar(circularProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), step_desc, current_steps)
+            day_label.setText("Yesterday")
+        }
+
 
         //Radio button set up
         weekly.setOnClickListener {
@@ -108,29 +116,6 @@ class TrendsFragment(today: Boolean) : Fragment() {
         db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
 
     }
-
-    //Get Time for Today
-    fun getToday(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-        val date = Date()
-        return formatter.format(date)
-    }
-
-    fun todayStartTimeEndTime(): ArrayList<Long> {
-        var returnValue = ArrayList<Long>()
-        val myStartDate = getToday() + " 00:00:01"
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = sdf.parse(myStartDate)
-        val startMilisecond = date.time
-        returnValue.add(startMilisecond)
-        val myEndDate = getToday() + " 23:59:59"
-        val Enddate = sdf.parse(myEndDate)
-        val endtMilisecond = Enddate.time
-        returnValue.add(endtMilisecond)
-        return returnValue
-    }
-
-
     private fun setStepProgressBar(
         circularProgressBar: CircularProgressBar,
         list: ArrayList<Long>,
@@ -155,7 +140,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
     private fun getSevenDayData(chart: LineChart) {
 
         //Refresh the chart
-        chart.notifyDataSetChanged();
+       // chart.notifyDataSetChanged();
         chart.invalidate();
         chart.clear()
         val dataList: ArrayList<DateStartEndForGraph> =
@@ -222,18 +207,17 @@ class TrendsFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            //YAxis Setup
+           /* //YAxis Setup
             var yValues = ArrayList<String>(26)
             for (i in 0..25) {
                 yValues.add(i.times(100).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter =
-                IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
+          //  yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
@@ -242,6 +226,8 @@ class TrendsFragment(today: Boolean) : Fragment() {
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
+            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 15000f
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
             yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -320,19 +306,18 @@ class TrendsFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
-            xAxis.labelCount = 3
+            xAxis.textSize = 14f
+            xAxis.labelCount = 4
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            //YAxis Setup Values Setup
+          /*  //YAxis Setup Values Setup
             var yValues = ArrayList<String>(3)
             for (i in 0..3) {
                 yValues.add(i.times(10000).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-            yAxis.valueFormatter =
-                IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
+            //yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
             //yAxis.labelCount = 3
@@ -340,9 +325,12 @@ class TrendsFragment(today: Boolean) : Fragment() {
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
 
+            yAxis.axisMaximum = 50000f
+            yAxis.axisMinimum = 0f
             yAxis.setDrawLabels(true)
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
+            yAxis.labelCount = 3
             yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
 
             //Set the Data

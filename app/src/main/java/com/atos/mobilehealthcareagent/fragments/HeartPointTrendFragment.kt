@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.R
+import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
 import com.github.mikephil.charting.charts.LineChart
@@ -61,6 +62,7 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
         weekly_heartpoint_chart.description.isEnabled = false
         weekly_heartpoint_chart.axisRight.gridColor = Color.WHITE
         weekly_heartpoint_chart.axisRight.setDrawLabels(false)
+        weekly_heartpoint_chart.extraRightOffset = 22f
 
         daily_heartpoint_chart.setTouchEnabled(true)
         daily_heartpoint_chart.setPinchZoom(false)
@@ -81,8 +83,15 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
         values.add(Entry(6f, 0f))
         getSevenDayData(daily_heartpoint_chart)
 
-        todayStartTimeEndTime()
-        setHeartPointProgressBar(heartPointProgressBar, todayStartTimeEndTime(), heartpoint_desc, curret_heartpoint)
+        if (today){
+            setHeartPointProgressBar(heartPointProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), heartpoint_desc, curret_heartpoint)
+            day_label.setText("Today")
+        }else{
+            setHeartPointProgressBar(heartPointProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), heartpoint_desc, curret_heartpoint)
+            day_label.setText("Yesterday")
+        }
+
+
 
         //Radio button set up
         weekly.setOnClickListener {
@@ -107,27 +116,6 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
 
     }
 
-    //Get Time for Today
-    fun getToday(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-        val date = Date()
-        return formatter.format(date)
-    }
-
-    fun todayStartTimeEndTime(): ArrayList<Long> {
-        var returnValue = ArrayList<Long>()
-        val myStartDate = getToday() + " 00:00:01"
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = sdf.parse(myStartDate)
-        val startMilisecond = date.time
-        returnValue.add(startMilisecond)
-        val myEndDate = getToday() + " 23:59:59"
-        val Enddate = sdf.parse(myEndDate)
-        val endtMilisecond = Enddate.time
-        returnValue.add(endtMilisecond)
-        return returnValue
-    }
-
 
     private fun setHeartPointProgressBar(
 
@@ -146,7 +134,7 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
 
             currentHeartPoint.setText(totalHeartPoints.toInt().toString())
             val heartPointDifference = (goalHeartPoints.minus(totalHeartPoints)).toInt()
-            heartpoint_desc.setText("$heartPointDifference Points Avg")
+            heartpoint_desc.setText("$heartPointDifference Points To Achieve")
         }
     }
 
@@ -220,17 +208,17 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            //YAxis Setup
+          /*  //YAxis Setup
             var yValues = ArrayList<String>(5)
             for (i in 0..5) {
                 yValues.add(i.times(100).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-             yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
+       //     yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
@@ -239,6 +227,8 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
+            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 50f
             yAxis.textColor = Color.WHITE
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
@@ -317,23 +307,23 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis -> xValues[value.toInt()] }
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            xAxis.textSize = 12f
+            xAxis.textSize = 14f
             xAxis.labelCount = 3
             xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.xOffset = 10f
-            xAxis.yOffset = 10f
 
-            //YAxis Setup Values Setup
+           /* //YAxis Setup Values Setup
             var yValues = ArrayList<String>(3)
             for (i in 0..3) {
                 yValues.add(i.times(10).toString())
-            }
+            }*/
 
             val yAxis = mChart.axisLeft
-             yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
+            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
             yAxis.labelCount = 3
+            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 700f
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
