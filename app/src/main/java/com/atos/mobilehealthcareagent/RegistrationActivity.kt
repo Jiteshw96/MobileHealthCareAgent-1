@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.Settings
 import android.text.InputFilter
 import android.util.Log
@@ -30,7 +29,6 @@ import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import kotlinx.android.synthetic.main.activity_registration.*
-import kotlinx.android.synthetic.main.activity_registration.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -428,8 +426,6 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
     fun onclickDoneRegistration(view:View){
 
-
-
             var user = User()
             if (name_value.text.trim().length > 0) {
                 user.firstName = name_value.text.trim().toString()
@@ -478,8 +474,6 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
             else{
                 Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()
             }
-
-
     }
 
     override fun getSDKPermission() {
@@ -542,11 +536,11 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                     datePicker.show(supportFragmentManager, "date picker")
                 }
             }
-
             goal -> {
 
                 if(motionEvent?.action == MotionEvent.ACTION_DOWN){
                     var intent = Intent(this,SetGoalsActivity::class.java)
+                    intent.putExtra("ClassFrom",RegistrationActivity::class.java)
                     intent.putExtra("name",name_value.text.toString())
                     intent.putExtra("gender",gender_spinner.selectedItemPosition)
                     intent.putExtra("dob",dob.text.toString())

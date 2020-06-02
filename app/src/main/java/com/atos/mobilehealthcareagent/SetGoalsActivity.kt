@@ -35,16 +35,31 @@ class SetGoalsActivity : AppCompatActivity() {
 
         //Set the goal and pass back the values
         set_btn.setOnClickListener{
-            val intent = Intent(this,RegistrationActivity::class.java)
-            intent.putExtra("Goal",data[numberPicker.value-1].toString())
 
-            intent.putExtra("name", getIntent().getStringExtra("name"))
-            intent.putExtra("gender", getIntent().getIntExtra("gender",0))
-            intent.putExtra("dob", getIntent().getStringExtra("dob"))
-            intent.putExtra("height", getIntent().getStringExtra("height"))
-            intent.putExtra("weight", getIntent().getStringExtra("weight"))
-            startActivity(intent)
-            finish()
+            val callingActivity = getIntent().getStringExtra("ClassFrom")
+            if(callingActivity.equals(RegistrationActivity::class.java)){
+                val intent = Intent(this,RegistrationActivity::class.java)
+                intent.putExtra("Goal",data[numberPicker.value-1].toString())
+                intent.putExtra("name", getIntent().getStringExtra("name"))
+                intent.putExtra("gender", getIntent().getIntExtra("gender",0))
+                intent.putExtra("dob", getIntent().getStringExtra("dob"))
+                intent.putExtra("height", getIntent().getStringExtra("height"))
+                intent.putExtra("weight", getIntent().getStringExtra("weight"))
+                startActivity(intent)
+                finish()
+            }else{
+                val intent = Intent(this,DashBoard::class.java)
+                intent.putExtra("Goal",data[numberPicker.value-1].toString())
+                intent.putExtra("name", getIntent().getStringExtra("name"))
+                intent.putExtra("gender", getIntent().getIntExtra("gender",0))
+                intent.putExtra("dob", getIntent().getStringExtra("dob"))
+                intent.putExtra("height", getIntent().getStringExtra("height"))
+                intent.putExtra("weight", getIntent().getStringExtra("weight"))
+                startActivity(intent)
+                finish()
+
+            }
+
 
         }
     }
