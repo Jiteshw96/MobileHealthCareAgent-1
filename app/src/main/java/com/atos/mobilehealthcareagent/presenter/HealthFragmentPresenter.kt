@@ -47,7 +47,7 @@ class HealthFragmentPresenter :
 
     override fun getProgressGraph(list:ArrayList<Long>){
 
-        if(mHealthFragmentModel.getFitnessDataCount(db)?.size!!>0){
+     //   if(mHealthFragmentModel.getFitnessDataCount(db)?.size!!>0){
 
            // TODO("Check the double type conversion")
             var totalBurnCalorie = mHealthFragmentModel.getCalorieCount(list.get(0), list.get(1),db)
@@ -99,7 +99,7 @@ class HealthFragmentPresenter :
             mHealthFragmentInterfaceViewInterface.setDistanceProgressGraph(distanceProgress?.toFloat()!!,distanceInKm,leftDistanceInKm)
             mHealthFragmentInterfaceViewInterface.setHeartPointProgressGraph(heartPointProgress?.toFloat()!!, totalHeartoint!!.toInt(),leftHeartPoint)
 
-        }
+     //   }
 
 
     }
