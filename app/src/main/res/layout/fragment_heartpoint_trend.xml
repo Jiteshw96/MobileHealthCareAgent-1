@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/stag_book"
-                android:text="BPM"
+                android:text="POINT"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"></TextView>

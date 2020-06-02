@@ -441,9 +441,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-              //  displayNotification("Data", totalData.toString())
+                displayNotification("Data", totalData.toString())
             }else{
-                //displayNotification("Data", "No Record")
+                displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -466,9 +466,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-              //  displayNotification("Data", totalData.toString())
+                displayNotification("Data", totalData.toString())
             }else{
-                //displayNotification("Data", "No Record")
+                displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -491,9 +491,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-              //  displayNotification("Data", totalData.toString())
+                displayNotification("Data", totalData.toString())
             }else{
-               // displayNotification("Data", "No Record")
+                displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -515,9 +515,9 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-               // displayNotification("Data", totalData.toString())
+                displayNotification("Data", totalData.toString())
             }else{
-              //  displayNotification("Data", "No Record")
+                displayNotification("Data", "No Record")
             }
         }
         return  totalData
@@ -539,31 +539,35 @@ class BackgroundTask {
                 totalData = totalData + (element.toString()).toDouble()
             }
             if(data.isNotEmpty()){
-               // displayNotification("Data", totalData.toString())
+                displayNotification("Data", totalData.toString())
             }else{
-                //displayNotification("Data", "No Record")
+                displayNotification("Data", "No Record")
             }
         }
         return  totalData
     }
 
-     fun displayNotification(task: String, desc: String?) {
+
+    fun displayNotification(task: String, desc: String?) {
         val manager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            var channel = NotificationChannel(
                 NotificationChannelID,
                 NotificationChannelName,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+            channel.setSound(null,null)
             manager.createNotificationChannel(channel)
         }
         val builder =
             NotificationCompat.Builder(context, NotificationChannelID)
-                .setContentTitle(task)
-                .setContentText(desc)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                // .setContentTitle(task)
+                // .setContentText(desc)
+                .setSmallIcon(R.drawable.app_logo_atos_syntek_health_app)
+
                 .setOngoing(true)
+        builder.setShowWhen(false)
         manager.notify(1, builder.build())
         Log.e("Time", Calendar.getInstance().getTime().toString())
     }

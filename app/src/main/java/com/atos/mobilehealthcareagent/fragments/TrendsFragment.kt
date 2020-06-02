@@ -227,7 +227,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
             yAxis.axisMinimum = 0f
-            yAxis.axisMaximum = 15000f
+            //yAxis.axisMaximum = 15000f
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
             yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -325,12 +325,12 @@ class TrendsFragment(today: Boolean) : Fragment() {
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
 
-            yAxis.axisMaximum = 50000f
+          //  yAxis.axisMaximum = 50000f
             yAxis.axisMinimum = 0f
             yAxis.setDrawLabels(true)
             yAxis.textColor = Color.WHITE
             yAxis.textSize = 14f
-            yAxis.labelCount = 3
+          //  yAxis.labelCount = 3
             yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
 
             //Set the Data
