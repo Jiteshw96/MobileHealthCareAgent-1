@@ -78,6 +78,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
 
     lateinit var mRegistrationActivityPresenter: RegistrationActivityPresenter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
@@ -262,6 +263,8 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
         Log.e(TAG, message)
     }
 
+    var isSubscribed=false
+
     /** Records step data by requesting a subscription to background step data.  */
     private fun subscribe() {
         // To create a subscription, invoke the Recording API. As soon as the subscription is
@@ -271,9 +274,12 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.i(TAG, "Successfully subscribed!")
-                    var intent= Intent(this, DashBoard::class.java)
-                    startActivity(intent)
-                    finish()
+                    if(!isSubscribed) {
+                        isSubscribed=true
+                        var intent = Intent(this, DashBoard::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 } else {
                     Log.w(TAG, "There was a problem subscribing.", task.exception)
                 }

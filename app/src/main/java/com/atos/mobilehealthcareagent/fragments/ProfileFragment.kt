@@ -76,7 +76,7 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
         setDataFromDatabase()
 
         done_btn.setOnClickListener{
-            onClickDoneEditUserProfile()
+          //  onClickDoneEditUserProfile()
         }
 
     }
