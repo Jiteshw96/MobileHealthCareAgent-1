@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
 import com.atos.mobilehealthcareagent.database.AppDatabase
@@ -25,6 +26,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_trends.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -109,8 +111,16 @@ class TrendsFragment(today: Boolean) : Fragment() {
             getSevenDayData(daily_steps_chart)
         }
 
-    }
 
+        button.setOnClickListener{
+            backToHealthFragment()
+        }
+
+
+    }
+    fun backToHealthFragment(){
+        (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_health
+    }
     fun initDatabase() {
         //Database Object Created
         db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
@@ -141,6 +151,10 @@ class TrendsFragment(today: Boolean) : Fragment() {
             }
         }
     }
+
+
+
+
 
     private fun getSevenDayData(chart: LineChart) {
 

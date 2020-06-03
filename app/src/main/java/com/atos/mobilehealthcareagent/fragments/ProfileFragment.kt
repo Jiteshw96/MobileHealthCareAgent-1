@@ -206,7 +206,7 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
             GoalSharedPreferences().removeGoal(activity!!.applicationContext)
         }
     }
-
+}
 
 
 
