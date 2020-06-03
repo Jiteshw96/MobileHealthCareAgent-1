@@ -153,7 +153,12 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
             currentCalories.setText(totalCalories.toInt().toString())
             val caloriesDifference = (goalCalories.minus(totalCalories)).toInt()
-            caloriesDesc.setText("$caloriesDifference Kcal To Burn")
+            if(caloriesDifference>0) {
+                caloriesDesc.setText("$caloriesDifference Kcal To Burn")
+            }
+            else{
+                caloriesDesc.setText("YOUR GOAL ACHIEVED")
+            }
         }
     }
 

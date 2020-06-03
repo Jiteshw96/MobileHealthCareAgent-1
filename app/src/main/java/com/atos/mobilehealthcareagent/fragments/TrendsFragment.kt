@@ -133,7 +133,12 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
             currentSteps.setText(totalSteps.toInt().toString())
             val stepDifference = (goalSteps.minus(totalSteps)).toInt()
-            stepDesc.setText("$stepDifference STEPS TO GO")
+            if(stepDifference>0) {
+                stepDesc.setText("$stepDifference STEPS TO GO")
+            }
+            else{
+                stepDesc.setText("YOUR GOAL ACHIEVED")
+            }
         }
     }
 
