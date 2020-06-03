@@ -135,7 +135,12 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             var differenceDistanceInKm= df.format((distanceDifference!!/1000.0f))
             distanceProgressBar.progress = distanceProgress?.toFloat()!!
             currentDistance.setText(totalDistanceInKm.toString())
-            distanceDesc.setText("$differenceDistanceInKm Km to Go")
+            if(differenceDistanceInKm.toFloat()>0.0) {
+                distanceDesc.setText("$differenceDistanceInKm Km to Go")
+            }
+            else{
+                distanceDesc.setText("YOUR GOAL ACHIEVED")
+            }
         }
     }
 

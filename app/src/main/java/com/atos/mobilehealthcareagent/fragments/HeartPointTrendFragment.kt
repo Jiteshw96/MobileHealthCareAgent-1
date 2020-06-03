@@ -134,7 +134,12 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
 
             currentHeartPoint.setText(totalHeartPoints.toInt().toString())
             val heartPointDifference = (goalHeartPoints.minus(totalHeartPoints)).toInt()
-            heartpoint_desc.setText("$heartPointDifference Points To Achieve")
+            if(heartPointDifference>0) {
+                heartpoint_desc.setText("$heartPointDifference Points To Achieve")
+            }
+            else{
+                heartpoint_desc.setText("YOUR GOAL ACHIEVED")
+            }
         }
     }
 
