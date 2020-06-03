@@ -14,12 +14,37 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="0dp"
             android:background="@color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.07"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:outlineSpotShadowColor="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_steps" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:background="@drawable/ic_back_btn_24dp"
+                    android:pointerIcon="text" />
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/circularProgressBar"
@@ -27,7 +52,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="52dp"
             android:layout_marginLeft="52dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="90dp"
             android:layout_marginEnd="52dp"
             android:layout_marginRight="52dp"
             android:foregroundGravity="center|center_horizontal"
@@ -78,7 +103,8 @@
             android:id="@+id/day_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/stag_medium"
             android:text="Today"
             android:textAllCaps="true"
@@ -87,7 +113,7 @@
             app:layout_constraintBottom_toTopOf="@+id/circularProgressBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/screen_label" />
 
         <TextView
             android:id="@+id/step_desc"
@@ -175,6 +201,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toggle" />
+
+        <TextView
+            android:id="@+id/screen_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="Steps"
+            android:fontFamily="@font/stag_book"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

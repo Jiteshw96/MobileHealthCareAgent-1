@@ -19,12 +19,12 @@
         android:layout_marginRight="52dp"
         android:layout_marginBottom="132dp"
         android:background="@drawable/login_btn"
-        android:fontFamily="sans-serif-condensed-light"
+        android:fontFamily="@font/stag_book"
+        android:onClick="onContinueClick"
         android:text="Continue"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="onContinueClick"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -44,10 +44,14 @@
 
     <TextView
         android:id="@+id/desc_lbl"
-        android:layout_width="269dp"
+        android:layout_width="0dp"
         android:layout_height="80dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="56dp"
-        android:fontFamily="sans-serif-condensed"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:fontFamily="@font/stag_book"
         android:gravity="center"
         android:text="@string/description"
         android:textColor="@color/white"
@@ -65,6 +69,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
+        android:fontFamily="@font/stag_book"
+        android:gravity="center_horizontal"
         android:text="@string/terms_policy_text"
         android:textColor="@color/white"
         android:textSize="10sp"
@@ -77,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
+        android:fontFamily="@font/stag_light"
         android:text="@string/copyright_text"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
