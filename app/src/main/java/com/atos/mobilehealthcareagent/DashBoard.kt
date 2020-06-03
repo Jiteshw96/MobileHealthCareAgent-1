@@ -1,7 +1,11 @@
 package com.atos.mobilehealthcareagent
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.DatePicker
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.work.*
@@ -15,12 +19,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 class DashBoard : AppCompatActivity(),
-    DashBoardActivityInterface.DashBoardActivityInterfaceViewInterface {
+    DashBoardActivityInterface.DashBoardActivityInterfaceViewInterface ,
+    DatePickerDialog.OnDateSetListener {
 
     lateinit var db: AppDatabase
     lateinit var mDashBoardActivityPresenter: DashBoardActivityPresenter
@@ -119,6 +125,18 @@ class DashBoard : AppCompatActivity(),
            // 4->openFragment()
         }
 
+    }
+
+    override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
+
+        val c = Calendar.getInstance()
+        c[Calendar.YEAR] = year
+        c[Calendar.MONTH] = month
+        c[Calendar.DAY_OF_MONTH] = day
+
+        val dob = DateFormat.getDateInstance().format(c.time)
+        val dobText = findViewById<View>(R.id.dob) as EditText
+        dobText.setText(dob)
     }
 
 

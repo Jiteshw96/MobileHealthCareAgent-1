@@ -310,22 +310,22 @@ class TrendsFragment(today: Boolean) : Fragment() {
             xAxis.labelCount = 4
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-          /*  //YAxis Setup Values Setup
-            var yValues = ArrayList<String>(3)
-            for (i in 0..3) {
-                yValues.add(i.times(10000).toString())
+            //YAxis Setup Values Setup
+        /*    var yValues = ArrayList<String>(26)
+            for (i in 0..25) {
+                yValues.add(i.times(1000).toString())
             }*/
 
             val yAxis = mChart.axisLeft
-            //yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 10000).toInt()] }
-            //yAxis.granularity = 0f
+           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value/1000).toInt()] }
+            //yAxis.granularity = 2f
             //yAxis.gridColor = Color.WHITE
-            //yAxis.labelCount = 3
+           // yAxis.labelCount = 6
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
 
-          //  yAxis.axisMaximum = 50000f
+            yAxis.axisMaximum = 25000f
             yAxis.axisMinimum = 0f
             yAxis.setDrawLabels(true)
             yAxis.textColor = Color.WHITE
