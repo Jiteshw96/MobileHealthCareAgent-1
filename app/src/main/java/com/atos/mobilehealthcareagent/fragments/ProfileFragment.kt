@@ -1,25 +1,25 @@
 package com.atos.mobilehealthcareagent.fragments
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.text.InputFilter
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.SetGoalsActivity
 import com.atos.mobilehealthcareagent.businesslogic.MinMaxFilter
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
+
+import com.atos.mobilehealthcareagent.fitnessharedpreferences.GoalSharedPreferences
 import com.atos.mobilehealthcareagent.presenter.RegistrationActivityPresenter
-import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.dob
 import kotlinx.android.synthetic.main.fragment_profile.gender_spinner
@@ -31,10 +31,12 @@ import java.text.DateFormat
 import java.util.*
 
 
-class ProfileFragment : Fragment() , View.OnTouchListener{
+
+class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
 
     lateinit var db: AppDatabase
     lateinit var mRegistrationActivityPresenter: RegistrationActivityPresenter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,8 @@ class ProfileFragment : Fragment() , View.OnTouchListener{
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+
         return view
     }
 
@@ -73,6 +77,14 @@ class ProfileFragment : Fragment() , View.OnTouchListener{
         goal.setOnTouchListener(this)
         setDataFromDatabase()
 
+        done_btn.setOnClickListener{
+          //  onClickDoneEditUserProfile()
+        }
+
+    }
+
+    override fun onClick(v: View?) {
+        Log.v("","ssd")
     }
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean { //To change body of created functions use File | Settings | File Templates.
@@ -121,7 +133,9 @@ class ProfileFragment : Fragment() , View.OnTouchListener{
        goal.setText(db.userDao()?.all?.get(0)?.goal_steps !!.toString())
     }
 
-    fun onclickDoneRegistration(view:View){
+
+
+    fun onClickDoneEditUserProfile(){
 
         var user = User()
         if (name_value.text.trim().length > 0) {
@@ -166,11 +180,34 @@ class ProfileFragment : Fragment() , View.OnTouchListener{
 
             db?.userDao()?.getGoalValue(7000)
 
-            mRegistrationActivityPresenter.saveUser(user,(goal.text.trim().toString()).toLong())
+            var goal=db.userDao()?.getGoalValue((goal.text.trim().toString()).toLong())
+
+            user.goal_calorie= goal?.calorie!!
+            user.goal_steps= goal?.steps!!
+            user.goal_distance= goal?.distance!!
+            user.goal_heartpoint= goal?.heartpoint!!
+            user.goal_moveminute= goal?.moveminute!!
+            db.userDao()?.insertAll(user)
+
+           // mRegistrationActivityPresenter.saveUser(user,(goal.text.trim().toString()).toLong())
         }
         else{
             Toast.makeText(this.context,"Enter all values",Toast.LENGTH_LONG).show()
         }
+
+    }
+
+     override fun onResume() {
+        super.onResume()
+        if(GoalSharedPreferences().getGoal(activity!!.applicationContext)?.length!!>0) {
+          //   goal.setText("Rajjjjj")
+
+            goal.setText(GoalSharedPreferences().getGoal(activity!!.applicationContext))
+
+            GoalSharedPreferences().removeGoal(activity!!.applicationContext)
+        }
+    }
+
 
 
     }
