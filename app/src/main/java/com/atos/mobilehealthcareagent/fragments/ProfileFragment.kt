@@ -200,7 +200,6 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
      override fun onResume() {
         super.onResume()
         if(GoalSharedPreferences().getGoal(activity!!.applicationContext)?.length!!>0) {
-          //   goal.setText("Rajjjjj")
 
             goal.setText(GoalSharedPreferences().getGoal(activity!!.applicationContext))
 
@@ -210,8 +209,8 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
 
 
 
-    }
 }
+
 
 
 
