@@ -57,7 +57,6 @@
             android:fontFamily="@font/stag_book"
             android:gravity="right"
             android:hint="Inch"
-
             android:inputType="number"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -164,7 +163,6 @@
             android:background="@drawable/round_btn"
             android:fontFamily="@font/stag_medium"
             android:text="Done"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

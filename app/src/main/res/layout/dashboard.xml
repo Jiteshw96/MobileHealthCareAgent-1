@@ -54,7 +54,7 @@
                                 android:gravity="center"
                                 android:text="Today"
                                 android:textColor="#ffffff"
-                                android:textSize="25sp">
+                                android:textSize="22sp">
 
                             </TextView>
 

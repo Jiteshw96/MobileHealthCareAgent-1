@@ -27,4 +27,7 @@
 
     </style>
 
+
+    <style name="CustomButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless"></style>
+
 </resources>
