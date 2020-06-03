@@ -5,6 +5,7 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.InputFilter
@@ -12,6 +13,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
@@ -20,6 +22,7 @@ import com.atos.mobilehealthcareagent.contract.RegistrationActivityInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.database.User
 import com.atos.mobilehealthcareagent.fitnessharedpreferences.LastSyncSharedPreferences
+import com.atos.mobilehealthcareagent.fragments.CustomProgressDialog
 import com.atos.mobilehealthcareagent.fragments.DatePickerFragment
 import com.atos.mobilehealthcareagent.googlefit.BackgroundTask
 import com.atos.mobilehealthcareagent.googlefit.readfitnessapi.ReadFitDataApi
@@ -77,6 +80,12 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
     lateinit var db: AppDatabase
 
     lateinit var mRegistrationActivityPresenter: RegistrationActivityPresenter
+
+
+
+    private val progressDialog =
+        CustomProgressDialog()
+    var doneclicked=false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -276,6 +285,10 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                     Log.i(TAG, "Successfully subscribed!")
                     if(!isSubscribed) {
                         isSubscribed=true
+                        if (doneclicked) {
+                            progressDialog.dialog.dismiss()
+                            doneclicked = false
+                        }
                         var intent = Intent(this, DashBoard::class.java)
                         startActivity(intent)
                         finish()
@@ -476,6 +489,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
                 db?.userDao()?.getGoalValue(7000)
 
                 mRegistrationActivityPresenter.saveUser(user,(goal.text.trim().toString()).toLong())
+                doneclicked=true
             }
             else{
                 Toast.makeText(this,"Enter all values",Toast.LENGTH_LONG).show()
@@ -559,6 +573,25 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
         }
 
         return true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT_WATCH)
+    override fun onPause() {
+        super.onPause()
+        Log.v("1234","Pause")
+
+
+
+        if (doneclicked) {
+            progressDialog.show(this,"Please Wait...")
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.v("1234","Resume")
+
     }
 
 }
