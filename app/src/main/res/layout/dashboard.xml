@@ -250,7 +250,7 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
+                                    android:gravity="center|left"
                                     android:text="STEPS TO GO"
                                     android:fontFamily="@font/stag_book"
                                     android:textColor="#FFFFFF" />
@@ -397,7 +397,7 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
+                                    android:gravity="center|left"
                                     android:text="Kcal To BURN"
                                     android:fontFamily="@font/stag_book"
                                     android:textColor="#FFFFFF" />
@@ -543,7 +543,7 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
+                                    android:gravity="center|left"
                                     android:text="KM To GO"
                                     android:fontFamily="@font/stag_book"
                                     android:textColor="#FFFFFF" />

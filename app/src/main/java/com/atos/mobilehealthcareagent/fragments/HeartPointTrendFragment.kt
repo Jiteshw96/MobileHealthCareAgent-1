@@ -110,7 +110,7 @@ class HeartPointTrendFragment(today: Boolean) : Fragment() {
             getSevenDayData(daily_heartpoint_chart)
         }
 
-        button.setOnClickListener{
+        btn_back_hertpoint.setOnClickListener{
             backToHealthFragment()
         }
 

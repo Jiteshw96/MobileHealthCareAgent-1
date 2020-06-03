@@ -112,7 +112,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
         }
 
 
-        button.setOnClickListener{
+        btn_back_step.setOnClickListener{
             backToHealthFragment()
         }
 
