@@ -27,7 +27,9 @@ import kotlinx.android.synthetic.main.fragment_profile.goal
 import kotlinx.android.synthetic.main.fragment_profile.height
 import kotlinx.android.synthetic.main.fragment_profile.name_value
 import kotlinx.android.synthetic.main.fragment_profile.weight
-import java.util.ArrayList
+import java.text.DateFormat
+import java.util.*
+
 
 
 class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
@@ -207,6 +209,8 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
     }
 
 
+
+    }
 }
 
 
