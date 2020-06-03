@@ -211,7 +211,25 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
 
 
     }
-}
+
+
+/*
+val date1 = Calendar.getInstance()
+ val builder = MaterialDatePicker.Builder.datePicker()
+ builder.setSelection(date1.timeInMillis)
+ val now = Calendar.getInstance()
+
+ val picker = builder.build()
+ picker.show(activity?.supportFragmentManager!!, picker.toString())
+
+// picker.addOnNegativeButtonClickListener { dismiss() }
+// picker.addOnPositiveButtonClickListener { Log.i("","The selected date range is ${it.first} - ${it.second}")}
+
+ picker.addOnPositiveButtonClickListener {
+     Log.i("","The selected date range is ${it}")
+ }
+ */
+
 
 
 
