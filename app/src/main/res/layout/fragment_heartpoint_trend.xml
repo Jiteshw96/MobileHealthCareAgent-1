@@ -19,6 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.07"
             app:layout_constraintHorizontal_bias="0.0"
+            android:elevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             android:outlineSpotShadowColor="@color/transparent"
             app:layout_constraintTop_toTopOf="parent">
@@ -27,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentInsetLeft="0dp"
+                android:elevation="0dp"
                 app:contentInsetStart="0dp">
 
                 <ImageView
@@ -43,6 +45,7 @@
                     android:layout_gravity="left"
                     android:gravity="left"
                     android:layout_marginTop="7dp"
+                    style="@style/CustomButtonStyle"
                     android:background="@drawable/ic_back_btn_72dp"
                     android:pointerIcon="text" />
 
