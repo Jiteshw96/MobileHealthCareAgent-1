@@ -111,7 +111,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             getSevenDayData(daily_distance_chart)
         }
 
-        button.setOnClickListener{
+        btn_back_distance.setOnClickListener{
             backToHealthFragment()
         }
 

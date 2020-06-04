@@ -112,7 +112,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
         }
 
 
-        button.setOnClickListener{
+        btn_back_step.setOnClickListener{
             backToHealthFragment()
         }
 
@@ -326,7 +326,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
             xAxis.gridColor = Color.WHITE
             xAxis.textColor = Color.WHITE
             xAxis.textSize = 14f
-            xAxis.labelCount = 4
+            xAxis.labelCount = 3
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup Values Setup

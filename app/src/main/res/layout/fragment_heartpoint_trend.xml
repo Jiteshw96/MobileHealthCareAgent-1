@@ -19,8 +19,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.07"
             app:layout_constraintHorizontal_bias="0.0"
-            android:elevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:elevation="0dp"
             android:outlineSpotShadowColor="@color/transparent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -39,7 +39,7 @@
                     android:src="@drawable/ic_heartpoint" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btn_back_hertpoint"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
@@ -205,7 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/stag_book"
-            android:text="HeartPoint"
+            android:text="Heart Point"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="16sp"

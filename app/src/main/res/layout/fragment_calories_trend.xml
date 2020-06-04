@@ -39,7 +39,7 @@
                     android:src="@drawable/ic_calorie" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btn_back_calorie"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"

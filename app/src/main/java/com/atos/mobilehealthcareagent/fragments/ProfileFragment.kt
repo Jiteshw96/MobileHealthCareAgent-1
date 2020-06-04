@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
         setDataFromDatabase()
 
         done_btn.setOnClickListener{
-          //  onClickDoneEditUserProfile()
+            onClickDoneEditUserProfile()
         }
 
     }
@@ -189,12 +189,17 @@ class ProfileFragment : Fragment() , View.OnTouchListener,View.OnClickListener {
             user.goal_moveminute= goal?.moveminute!!
             db.userDao()?.insertAll(user)
 
+            showUpdateToast()
            // mRegistrationActivityPresenter.saveUser(user,(goal.text.trim().toString()).toLong())
         }
         else{
             Toast.makeText(this.context,"Enter all values",Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    fun showUpdateToast(){
+        Toast.makeText(activity,"User data updated",Toast.LENGTH_LONG).show()
     }
 
      override fun onResume() {

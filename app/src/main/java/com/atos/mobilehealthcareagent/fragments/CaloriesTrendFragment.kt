@@ -108,7 +108,7 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             getSevenDayData(daily_calories_chart)
         }
 
-        button.setOnClickListener{
+        btn_back_calorie.setOnClickListener{
             backToHealthFragment()
         }
 
