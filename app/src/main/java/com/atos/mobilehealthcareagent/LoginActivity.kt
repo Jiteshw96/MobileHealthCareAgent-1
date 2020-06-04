@@ -2,16 +2,20 @@ package com.atos.mobilehealthcareagent
 
 import android.content.Context
 import android.content.Intent
-import android.media.audiofx.BassBoost
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.atos.mobilehealthcareagent.contract.LoginActivityInterface
 import com.atos.mobilehealthcareagent.presenter.LoginActivityPresenter
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.view.*
+import java.util.regex.Pattern
 
 
 class LoginActivity : AppCompatActivity(),
@@ -39,9 +43,15 @@ class LoginActivity : AppCompatActivity(),
 
 
     fun onContinueClick(view: View) {
-        var intent = Intent(this, RegistrationActivity::class.java)
-        startActivity(intent)
-        finish()
+
+        if(isValidMobile(ph_number.text.toString())){
+            var intent = Intent(this, RegistrationActivity::class.java)
+            startActivity(intent)
+            finish()
+        }else{
+            Toast.makeText(this,"Please Enter a Valid Mobile Number",Toast.LENGTH_LONG).show()
+        }
+
 
     }
 
@@ -63,6 +73,18 @@ class LoginActivity : AppCompatActivity(),
         }
 
 
+    }
+
+    private fun isValidMobile(phone: String): Boolean {
+       /* if(phone.contains("." ) || phone.length < 10){
+            return false
+        }
+        return Patterns.PHONE.matcher(phone).matches()*/
+        val  patterntomatch ="^[+]?[0-9]{10,13}\$";
+        val pattern=Pattern.compile(patterntomatch);
+        val matcher=pattern.matcher(phone);
+
+        return matcher.matches();
     }
 
 
