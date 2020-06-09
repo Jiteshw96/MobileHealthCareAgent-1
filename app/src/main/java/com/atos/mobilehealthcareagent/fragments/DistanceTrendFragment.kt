@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
+import com.atos.mobilehealthcareagent.contract.TrendFragmentInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
+import com.atos.mobilehealthcareagent.presenter.TrendFragmentPresenter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -29,13 +31,12 @@ import kotlinx.android.synthetic.main.fragment_distance_trend.*
 import kotlinx.android.synthetic.main.fragment_trends.daily
 import kotlinx.android.synthetic.main.fragment_trends.weekly
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
-class DistanceTrendFragment(today: Boolean) : Fragment() {
+class DistanceTrendFragment(today: Boolean) : Fragment() ,TrendFragmentInterface.TrendFragmentInterfaceViewInterface {
 
-    lateinit var db: AppDatabase
+     lateinit var db: AppDatabase
+     lateinit var mTrendFragmentPresenter: TrendFragmentPresenter
      val df = DecimalFormat("#.##")
 
     var today=true
@@ -57,6 +58,8 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
 
         initDatabase()
 
+        mTrendFragmentPresenter = TrendFragmentPresenter(this,this.context!!)
+
         //chart Setup
         weekly_distance_chart.visibility = View.GONE
         weekly_distance_chart.setTouchEnabled(false)
@@ -76,7 +79,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         daily_distance_chart.axisRight.gridColor = Color.WHITE
         daily_distance_chart.axisRight.setDrawLabels(false)
 
-        //Dummy Data For Chart
+       /* //Dummy Data For Chart
         val values = ArrayList<Entry>()
         values.add(Entry(0f, 10000f))
         values.add(Entry(1f, 20000f))
@@ -84,14 +87,16 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         values.add(Entry(3f, 11443f))
         values.add(Entry(4f, 300f))
         values.add(Entry(5f, 25000f))
-        values.add(Entry(6f, 0f))
-        getSevenDayData(daily_distance_chart)
+        values.add(Entry(6f, 0f))*/
+        mTrendFragmentPresenter.setSevenDayData("Distance")
 
         if(today){
-            setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), distance_desc, current_distance)
+            //setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), distance_desc, current_distance)
+            mTrendFragmentPresenter.setProgressBarData("Distance",true)
             day_label.setText("Today")
         }else{
-            setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), distance_desc, current_distance)
+           // setDistanceProgressBar(distanceProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), distance_desc, current_distance)
+            mTrendFragmentPresenter.setProgressBarData("Distance",false)
             day_label.setText("Yesterday")
         }
 
@@ -101,14 +106,14 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
 
             daily_distance_chart.visibility = View.INVISIBLE
             weekly_distance_chart.visibility = View.VISIBLE
-            getWeeklyData(weekly_distance_chart)
+            mTrendFragmentPresenter.setWeeklyData("Distance")
 
         }
 
         daily.setOnClickListener {
             daily_distance_chart.visibility = View.VISIBLE
             weekly_distance_chart.visibility = View.INVISIBLE
-            getSevenDayData(daily_distance_chart)
+            mTrendFragmentPresenter.setSevenDayData("Distance")
         }
 
         btn_back_distance.setOnClickListener{
@@ -118,76 +123,10 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
 
     }
 
-    fun backToHealthFragment(){
-        (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_health
-    }
-
-
-    fun initDatabase() {
-        //Database Object Created
-        db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
-
-    }
-
-    private fun setDistanceProgressBar(
-        circularProgressBar: CircularProgressBar,
-        list: ArrayList<Long>,
-        distanceDesc: TextView,
-        currentDistance: TextView
-    ) {
-        if (db?.userDao()?.allFitnessData?.size != 0) {
-
-            var totalDistance: Double = (db?.userDao()?.getDistanceCount(list[0], list[1]))!!.toDouble()
-
-            Log.v("totalDistance", "" + totalDistance);
-            val goalDistance: Double = (db?.userDao()?.all?.get(0)?.goal_distance!!).toDouble()
-            val distanceProgress = (totalDistance?.div(goalDistance!!))?.times(100)
-            val distanceDifference = (goalDistance.minus(totalDistance)).toInt()
-            val totalDistanceInKm =  df.format((totalDistance!!/1000.0f))
-            var differenceDistanceInKm= df.format((distanceDifference!!/1000.0f))
-            distanceProgressBar.progress = distanceProgress?.toFloat()!!
-            currentDistance.setText(totalDistanceInKm.toString())
-            if(differenceDistanceInKm.toFloat()>0.0) {
-                distanceDesc.setText("$differenceDistanceInKm Km to Go")
-            }
-            else{
-                distanceDesc.setText("YOUR GOAL ACHIEVED")
-            }
-        }
-    }
-
-    private fun getSevenDayData(chart: LineChart) {
-
-        //Refresh the chart
-        chart.notifyDataSetChanged();
-        chart.invalidate();
-        chart.clear()
-        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEndForGraph> =
-            GetDateDetailsStartEndTime().ListOfDaysForGraph(7)
-
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var distance = db?.userDao()?.getDistanceCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add(data.wekday)
-            dataValue.add(Entry(i, ((distance?.toFloat() ?: 0f)/1000.0).toFloat()    ))
-            //  dataValue.add(Entry(i,i.times(200)))
-            i++
-
-        }
-        displayDailyData(chart, dataLabel, dataValue)
-    }
-
-    //Display Daily Chart Data
-    private fun displayDailyData(
-        mChart: LineChart,
-        dataLabel: ArrayList<String>,
-        dataValues: ArrayList<Entry>
-    ) {
+    override fun displayDailyData(dataLabel: ArrayList<String>, dataValues: ArrayList<Entry>) {
         val set: LineDataSet
 
+        val mChart:LineChart = daily_distance_chart
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
             set = mChart.data.getDataSetByIndex(0) as LineDataSet
             set.values = dataValues
@@ -229,18 +168,18 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup
-          /*  var yValues = ArrayList<String>(5)
-            for (i in 0..5) {
-                yValues.add(i.times(100).toString())
-            }*/
+            /*  var yValues = ArrayList<String>(5)
+              for (i in 0..5) {
+                  yValues.add(i.times(100).toString())
+              }*/
 
             val yAxis = mChart.axisLeft
-          //  yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
+            //  yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
             yAxis.axisMinimum = 0f
-           // yAxis.axisMaximum = 30f
+            // yAxis.axisMaximum = 30f
             yAxis.labelCount = 3
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
@@ -259,38 +198,37 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             mChart.data = data
 
         }
+    }
+
+    override fun backToHealthFragment(){
+        (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_health
+    }
+
+
+    fun initDatabase() {
+        //Database Object Created
+        db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
 
     }
 
-    private fun getWeeklyData(chart: LineChart) {
-        //Refresh the chart
-        chart.notifyDataSetChanged()
-        chart.invalidate()
-        chart.clear()
-        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEnd> = GetDateDetailsStartEndTime().ListOfWeekForGraph(4)
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var distance = db?.userDao()?.getDistanceCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, ((distance?.toFloat() ?: 0f)/1000.0).toFloat()     ))
-            // dataValue.add(Entry(i,i.times(200)))
-            i++
+    override fun setProgressBar(progress: Float, currentTrendProgress: String, remainingGoal: String) {
+        distanceProgressBar.progress = progress!!
+        current_distance.setText(currentTrendProgress)
+        if(remainingGoal.toFloat()>0.0){
+            distance_desc.setText("$remainingGoal Km to Go")
+        }else{
+            distance_desc.setText("YOUR GOAL ACHIEVED")
         }
-        displayWeeklyChart(chart, dataLabel, dataValue)
+
     }
+
+
 
     //TODO Distance m to km
-    //Display weekly ChartData
-    private fun displayWeeklyChart(
-        mChart: LineChart,
-        dataLabel: ArrayList<String>,
-        dataValues: ArrayList<Entry>
-    ) {
+    override fun displayWeeklyChart(dataLabel: ArrayList<String>, dataValues: ArrayList<Entry>) {
         val set: LineDataSet
 
+        val mChart:LineChart =  weekly_distance_chart
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
             set = mChart.data.getDataSetByIndex(0) as LineDataSet
             set.values = dataValues
@@ -332,17 +270,17 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
             xAxis.xOffset = 10f
             xAxis.yOffset = 10f
 
-           /* //YAxis Setup Values Setup
-            var yValues = ArrayList<String>(3)
-            for (i in 0..3) {
-                yValues.add(i.times(10).toString())
-            }*/
+            /* //YAxis Setup Values Setup
+             var yValues = ArrayList<String>(3)
+             for (i in 0..3) {
+                 yValues.add(i.times(10).toString())
+             }*/
 
             val yAxis = mChart.axisLeft
-           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
+            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value.toInt())]}
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
-          //  yAxis.axisMaximum = 200f
+            //  yAxis.axisMaximum = 200f
             yAxis.axisMinimum = 0f
             yAxis.labelCount = 3
             //yAxis.setDrawGridLines(true)
@@ -362,7 +300,7 @@ class DistanceTrendFragment(today: Boolean) : Fragment() {
         }
 
     }
-    private fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
+    override fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
         var maxLabelCount = 0f
         for (data in dataValues) {
             if (data.y > maxLabelCount) {

@@ -10,7 +10,7 @@ interface DashBoardActivityInterface {
         fun initialize(openFragment:Int,today:Boolean)
         fun openFragment(fragment: Fragment?)
 
-        fun checkuserGoalCreatedOrNot()
+        fun checkUserGoalCreatedOrNot()
 
         fun initLongRunningService()
 

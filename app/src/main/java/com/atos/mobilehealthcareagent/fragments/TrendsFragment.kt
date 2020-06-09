@@ -12,10 +12,12 @@ import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
+import com.atos.mobilehealthcareagent.contract.TrendFragmentInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime.DateStartEnd
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime.DateStartEndForGraph
+import com.atos.mobilehealthcareagent.presenter.TrendFragmentPresenter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -27,15 +29,17 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.android.synthetic.main.fragment_trends.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TrendsFragment(today: Boolean) : Fragment() {
+class TrendsFragment(today: Boolean) : Fragment() , TrendFragmentInterface.TrendFragmentInterfaceViewInterface {
 
 
     lateinit var db: AppDatabase
+    lateinit var mTrendFragmentPresenter: TrendFragmentPresenter
 
     var today=true
     init {
@@ -56,6 +60,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         initDatabase()
+        mTrendFragmentPresenter = TrendFragmentPresenter(this,this.context!!)
 
         //chart Setup
         weekly_steps_chart.visibility = View.GONE
@@ -76,22 +81,15 @@ class TrendsFragment(today: Boolean) : Fragment() {
         daily_steps_chart.axisRight.gridColor = Color.WHITE
         daily_steps_chart.axisRight.setDrawLabels(false)
 
-        //Dummy Data For Chart
-        val values = ArrayList<Entry>()
-        values.add(Entry(0f, 10000f))
-        values.add(Entry(1f, 20000f))
-        values.add(Entry(2f, 12400f))
-        values.add(Entry(3f, 11443f))
-        values.add(Entry(4f, 300f))
-        values.add(Entry(5f, 25000f))
-        values.add(Entry(6f, 0f))
-        getSevenDayData(daily_steps_chart)
+        mTrendFragmentPresenter.setSevenDayData("Steps")
 
         if(today){
-            setStepProgressBar(circularProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), step_desc, current_steps)
+            mTrendFragmentPresenter.setProgressBarData("Steps",true)
+           // setStepProgressBar(circularProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), step_desc, current_steps)
             day_label.setText("Today")
         }else{
-            setStepProgressBar(circularProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), step_desc, current_steps)
+            mTrendFragmentPresenter.setProgressBarData("Steps",false)
+            //setStepProgressBar(circularProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), step_desc, current_steps)
             day_label.setText("Yesterday")
         }
 
@@ -101,14 +99,15 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
             daily_steps_chart.visibility = View.INVISIBLE
             weekly_steps_chart.visibility = View.VISIBLE
-            getWeeklyData(weekly_steps_chart)
+           // getWeeklyData(weekly_steps_chart)
+            mTrendFragmentPresenter.setWeeklyData("Steps")
 
         }
 
         daily.setOnClickListener {
             daily_steps_chart.visibility = View.VISIBLE
             weekly_steps_chart.visibility = View.INVISIBLE
-            getSevenDayData(daily_steps_chart)
+           mTrendFragmentPresenter.setSevenDayData("Steps")
         }
 
 
@@ -118,7 +117,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
 
     }
-    fun backToHealthFragment(){
+   override fun backToHealthFragment(){
         (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_health
     }
     fun initDatabase() {
@@ -126,66 +125,28 @@ class TrendsFragment(today: Boolean) : Fragment() {
         db = AppDatabase.getAppDatabase(activity!!.applicationContext) as AppDatabase
 
     }
-    private fun setStepProgressBar(
-        circularProgressBar: CircularProgressBar,
-        list: ArrayList<Long>,
-        stepDesc: TextView,
-        currentSteps: TextView
+
+    override fun setProgressBar(
+        progress: Float,
+        currentTrendProgress: String,
+        remainingGoal: String
     ) {
-        if (db?.userDao()?.allFitnessData?.size != 0) {
-
-            var totalSteps: Double = (db?.userDao()?.getStepCount(list[0], list[1]))!!.toDouble()
-            //var totalSteps:Double = 2700.toDouble()
-            Log.v("totalSteps", "" + totalSteps);
-            val goalSteps: Double = (db?.userDao()?.all?.get(0)?.goal_steps!!).toDouble()
-            val stepProgress = (totalSteps?.div(goalSteps!!))?.times(100)
-            circularProgressBar.progress = stepProgress?.toFloat()!!
-
-            currentSteps.setText(totalSteps.toInt().toString())
-            val stepDifference = (goalSteps.minus(totalSteps)).toInt()
-            if(stepDifference>0) {
-                stepDesc.setText("$stepDifference STEPS TO GO")
-            }
-            else{
-                stepDesc.setText("YOUR GOAL ACHIEVED")
-            }
+         circularProgressBar.progress = progress!!
+        current_steps.setText(currentTrendProgress)
+        if(remainingGoal.toInt()>0) {
+            step_desc.setText("$remainingGoal STEPS TO GO")
         }
-    }
-
-
-
-
-
-    private fun getSevenDayData(chart: LineChart) {
-
-        //Refresh the chart
-       // chart.notifyDataSetChanged();
-        chart.invalidate();
-        chart.clear()
-        val dataList: ArrayList<DateStartEndForGraph> =
-            GetDateDetailsStartEndTime().ListOfDaysForGraph(7)
-
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var steps = db?.userDao()?.getStepCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add(data.wekday)
-            dataValue.add(Entry(i, steps?.toFloat() ?: 0f))
-            //  dataValue.add(Entry(i,i.times(200)))
-            i++
-
+        else{
+            step_desc.setText("YOUR GOAL ACHIEVED")
         }
-        displayDailyData(chart, dataLabel, dataValue)
     }
 
     //Display Daily Chart Data
-    private fun displayDailyData(
-        mChart: LineChart,
+    override fun displayDailyData(
         dataLabel: ArrayList<String>,
         dataValues: ArrayList<Entry>
     ) {
+        val mChart:LineChart =  daily_steps_chart
         val set: LineDataSet
 
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
@@ -261,33 +222,9 @@ class TrendsFragment(today: Boolean) : Fragment() {
 
     }
 
-    private fun getWeeklyData(chart: LineChart) {
 
-        //Refresh the chart
-        chart.notifyDataSetChanged()
-        chart.invalidate()
-        chart.clear()
-        val dataList: ArrayList<DateStartEnd> = GetDateDetailsStartEndTime().ListOfWeekForGraph(4)
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var steps = db?.userDao()?.getStepCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, steps?.toFloat() ?: 0f))
-            // dataValue.add(Entry(i,i.times(200)))
-            i++
-        }
-        displayWeeklyChart(chart, dataLabel, dataValue)
-    }
-
-    //Display weekly ChartData
-    private fun displayWeeklyChart(
-        mChart: LineChart,
-        dataLabel: ArrayList<String>,
-        dataValues: ArrayList<Entry>
-    ) {
+    override fun displayWeeklyChart(dataLabel: ArrayList<String>, dataValues: ArrayList<Entry>) {
+        val mChart:LineChart =  weekly_steps_chart
         val set: LineDataSet
 
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
@@ -330,16 +267,16 @@ class TrendsFragment(today: Boolean) : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup Values Setup
-        /*    var yValues = ArrayList<String>(26)
-            for (i in 0..25) {
-                yValues.add(i.times(1000).toString())
-            }*/
+            /*    var yValues = ArrayList<String>(26)
+                for (i in 0..25) {
+                    yValues.add(i.times(1000).toString())
+                }*/
 
             val yAxis = mChart.axisLeft
-           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value/1000).toInt()] }
+            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value/1000).toInt()] }
             //yAxis.granularity = 2f
             //yAxis.gridColor = Color.WHITE
-           // yAxis.labelCount = 6
+            // yAxis.labelCount = 6
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
@@ -360,7 +297,7 @@ class TrendsFragment(today: Boolean) : Fragment() {
         }
 
     }
-    private fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
+    override fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
         var maxLabelCount = 0f
         for (data in dataValues) {
             if (data.y > maxLabelCount) {

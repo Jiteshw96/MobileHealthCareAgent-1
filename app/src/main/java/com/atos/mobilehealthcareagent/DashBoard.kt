@@ -46,7 +46,7 @@ class DashBoard : AppCompatActivity(),
     }
 
 
-    override fun checkuserGoalCreatedOrNot() {
+    override fun checkUserGoalCreatedOrNot() {
 
         db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase
 

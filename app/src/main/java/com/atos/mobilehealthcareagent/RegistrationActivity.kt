@@ -107,7 +107,7 @@ class RegistrationActivity : AppCompatActivity(), OnDateSetListener,
     }
 
 
-    override fun checkuserGoalCreatedOrNot() {
+    override fun checkUserGoalCreatedOrNot() {
 
 
         db = AppDatabase.getAppDatabase(applicationContext) as AppDatabase

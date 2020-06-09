@@ -13,7 +13,7 @@ import com.atos.mobilehealthcareagent.model.LoginModel
 class DashBoardActivityPresenter :
     DashBoardActivityInterface.DashBoardActivityInterfacePresenterInterface {
 
-    lateinit var mDashBoardActivityInterfaceViewInterface: DashBoardActivityInterfaceViewInterface
+     var mDashBoardActivityInterfaceViewInterface: DashBoardActivityInterfaceViewInterface
 
 
     constructor(
@@ -28,7 +28,7 @@ class DashBoardActivityPresenter :
     override fun initialize() {
         mDashBoardActivityInterfaceViewInterface.initialize(0,true)
         mDashBoardActivityInterfaceViewInterface.openFragment(HealthFragment())
-        mDashBoardActivityInterfaceViewInterface.checkuserGoalCreatedOrNot()
+        mDashBoardActivityInterfaceViewInterface.checkUserGoalCreatedOrNot()
         mDashBoardActivityInterfaceViewInterface.initLongRunningService()
     }
 

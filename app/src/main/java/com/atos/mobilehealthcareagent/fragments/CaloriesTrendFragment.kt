@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import com.atos.mobilehealthcareagent.DashBoard
 import com.atos.mobilehealthcareagent.R
 import com.atos.mobilehealthcareagent.businesslogic.TrendsBusinessLogic
+import com.atos.mobilehealthcareagent.contract.TrendFragmentInterface
 import com.atos.mobilehealthcareagent.database.AppDatabase
 import com.atos.mobilehealthcareagent.googlefit.GetDateDetailsStartEndTime
+import com.atos.mobilehealthcareagent.presenter.TrendFragmentPresenter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -26,14 +28,18 @@ import com.github.mikephil.charting.utils.Utils
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_calories_trend.*
+import kotlinx.android.synthetic.main.fragment_calories_trend.daily
+import kotlinx.android.synthetic.main.fragment_calories_trend.day_label
+import kotlinx.android.synthetic.main.fragment_calories_trend.weekly
+import kotlinx.android.synthetic.main.fragment_trends.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CaloriesTrendFragment(today: Boolean) : Fragment() {
+class CaloriesTrendFragment(today: Boolean) : Fragment() , TrendFragmentInterface.TrendFragmentInterfaceViewInterface {
 
     lateinit var db: AppDatabase
-    lateinit var trendsBusinessLogic: TrendsBusinessLogic
+    lateinit var mTrendFragmentPresenter: TrendFragmentPresenter
     var today=true
     init {
         this.today=today
@@ -52,6 +58,7 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         initDatabase()
+        mTrendFragmentPresenter = TrendFragmentPresenter(this,this.context!!)
 
         //chart Setup
         weekly_calories_chart.visibility = View.GONE
@@ -72,23 +79,16 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
         daily_calories_chart.axisRight.gridColor = Color.WHITE
         daily_calories_chart.axisRight.setDrawLabels(false)
 
-        //Dummy Data For Chart
-        val values = ArrayList<Entry>()
-        values.add(Entry(0f, 10000f))
-        values.add(Entry(1f, 20000f))
-        values.add(Entry(2f, 12400f))
-        values.add(Entry(3f, 11443f))
-        values.add(Entry(4f, 300f))
-        values.add(Entry(5f, 25000f))
-        values.add(Entry(6f, 0f))
-        getSevenDayData(daily_calories_chart)
+        mTrendFragmentPresenter.setSevenDayData("Calorie")
 
         if(today){
-            setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), calories_desc, current_calories)
+            mTrendFragmentPresenter.setProgressBarData("Calorie",true)
+            //setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().todayStartTimeEndTime(), calories_desc, current_calories)
             day_label.setText("Today")
 
         } else{
-            setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), calories_desc, current_calories)
+            mTrendFragmentPresenter.setProgressBarData("Calorie",false)
+           // setCaloriesProgressBar(caloriesProgressBar, TrendsBusinessLogic().yesterdayStartTimeEndTime(), calories_desc, current_calories)
             day_label.setText("Yesterday")
         }
 
@@ -98,14 +98,16 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
             daily_calories_chart.visibility = View.INVISIBLE
             weekly_calories_chart.visibility = View.VISIBLE
-            getWeeklyData(weekly_calories_chart)
+            mTrendFragmentPresenter.setWeeklyData("Calorie")
+           // getWeeklyData(weekly_calories_chart)
 
         }
 
         daily.setOnClickListener {
             daily_calories_chart.visibility = View.VISIBLE
             weekly_calories_chart.visibility = View.INVISIBLE
-            getSevenDayData(daily_calories_chart)
+           mTrendFragmentPresenter.setSevenDayData("Calorie")
+           // getSevenDayData(daily_calories_chart)
         }
 
         btn_back_calorie.setOnClickListener{
@@ -120,88 +122,14 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
 
     }
 
-    //Get Time for Today
-    fun getToday(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-        val date = Date()
-        return formatter.format(date)
-    }
 
-    fun todayStartTimeEndTime(): ArrayList<Long> {
-        var returnValue = ArrayList<Long>()
-        val myStartDate = getToday() + " 00:00:01"
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = sdf.parse(myStartDate)
-        val startMilisecond = date.time
-        returnValue.add(startMilisecond)
-        val myEndDate = getToday() + " 23:59:59"
-        val Enddate = sdf.parse(myEndDate)
-        val endtMilisecond = Enddate.time
-        returnValue.add(endtMilisecond)
-        return returnValue
-    }
 
-    fun backToHealthFragment(){
+   override fun backToHealthFragment(){
         (activity as DashBoard).bottom_navigation.selectedItemId=R.id.navigation_health
     }
 
-
-    private fun setCaloriesProgressBar(
-        circularProgressBar: CircularProgressBar,
-        list: ArrayList<Long>,
-        caloriesDesc: TextView,
-        currentCalories: TextView
-    ) {
-        if (db?.userDao()?.allFitnessData?.size != 0) {
-
-            var totalCalories: Double = (db?.userDao()?.getCalorieCount(list[0], list[1]))!!.toDouble()
-
-            Log.v("totalCalories", "" + totalCalories);
-            val goalCalories: Double = (db?.userDao()?.all?.get(0)?.goal_calorie!!).toDouble()
-            val caloriesProgress = (totalCalories?.div(goalCalories!!))?.times(100)
-            caloriesProgressBar.progress = caloriesProgress?.toFloat()!!
-
-            currentCalories.setText(totalCalories.toInt().toString())
-            val caloriesDifference = (goalCalories.minus(totalCalories)).toInt()
-            if(caloriesDifference>0) {
-                caloriesDesc.setText("$caloriesDifference Kcal To Burn")
-            }
-            else{
-                caloriesDesc.setText("YOUR GOAL ACHIEVED")
-            }
-        }
-    }
-
-    private fun getSevenDayData(chart: LineChart) {
-
-        //Refresh the chart
-        chart.notifyDataSetChanged();
-        chart.invalidate();
-        chart.clear()
-        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEndForGraph> =
-            GetDateDetailsStartEndTime().ListOfDaysForGraph(7)
-
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var calroies = db?.userDao()?.getCalorieCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add(data.wekday)
-            dataValue.add(Entry(i, calroies?.toFloat() ?: 0f))
-            //  dataValue.add(Entry(i,i.times(200)))
-             i++
-
-        }
-        displayDailyData(chart, dataLabel, dataValue)
-    }
-
-    //Display Daily Chart Data
-    private fun displayDailyData(
-        mChart: LineChart,
-        dataLabel: ArrayList<String>,
-        dataValues: ArrayList<Entry>
-    ) {
+    override fun displayDailyData(dataLabel: ArrayList<String>, dataValues: ArrayList<Entry>) {
+        val mChart:LineChart =  daily_calories_chart
         val set: LineDataSet
 
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
@@ -245,14 +173,14 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             xAxis.textSize = 14f
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-          /*  //YAxis Setup
-            var yValues = ArrayList<String>(5)
-            for (i in 0..5) {
-                yValues.add(i.times(100).toString())
-            }
-*/
+            /*  //YAxis Setup
+              var yValues = ArrayList<String>(5)
+              for (i in 0..5) {
+                  yValues.add(i.times(100).toString())
+              }
+  */
             val yAxis = mChart.axisLeft
-           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
+            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value / 100).toInt()] }
 
             yAxis.setDrawLabels(true)
             yAxis.labelCount = getMaxLabelCount(dataValues)
@@ -272,36 +200,26 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             mChart.data = data
 
         }
-
     }
 
-    private fun getWeeklyData(chart: LineChart) {
-
-        //Refresh the chart
-        chart.notifyDataSetChanged()
-        chart.invalidate()
-        chart.clear()
-        val dataList: ArrayList<GetDateDetailsStartEndTime.DateStartEnd> = GetDateDetailsStartEndTime().ListOfWeekForGraph(4)
-        val dataLabel = ArrayList<String>()
-        val dataValue = ArrayList<Entry>()
-        var i = 0f
-
-        for (data in dataList) {
-            var  calories = db?.userDao()?.getCalorieCount(data.mStartTimeInMili, data.mEndTimeInMili)
-            dataLabel.add("Week ${i.toInt() + 1}")
-            dataValue.add(Entry(i, calories?.toFloat() ?: 0f))
-            // dataValue.add(Entry(i,i.times(200)))
-            i++
-        }
-        displayWeeklyChart(chart, dataLabel, dataValue)
-    }
-
-    //Display weekly ChartData
-    private fun displayWeeklyChart(
-        mChart: LineChart,
-        dataLabel: ArrayList<String>,
-        dataValues: ArrayList<Entry>
+    override fun setProgressBar(
+        progress: Float,
+        currentTrendProgress: String,
+        remainingGoal: String
     ) {
+        caloriesProgressBar.progress = progress!!
+        current_calories.setText(currentTrendProgress)
+        if(remainingGoal.toInt()>0) {
+            calories_desc.setText("$remainingGoal Kcal To Burn")
+        }
+        else{
+            step_desc.setText("YOUR GOAL ACHIEVED")
+        }
+
+    }
+
+    override fun displayWeeklyChart(dataLabel: ArrayList<String>, dataValues: ArrayList<Entry>) {
+        val mChart:LineChart =  weekly_calories_chart
         val set: LineDataSet
 
         if (mChart.data != null && mChart.data.dataSetCount > 0) {
@@ -344,21 +262,21 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 
             //YAxis Setup Values Setup
-          /*  var yValues = ArrayList<String>(4)
-            for (i in 0..4) {
-                yValues.add(i.times(1000).toString())
-            }*/
+            /*  var yValues = ArrayList<String>(4)
+              for (i in 0..4) {
+                  yValues.add(i.times(1000).toString())
+              }*/
 
 
             val yAxis = mChart.axisLeft
-           // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
+            // yAxis.valueFormatter = IAxisValueFormatter { value, axis -> yValues[(value).toInt()] }
             yAxis.axisMinimum = 0f
             yAxis.axisMaximum = 10000f
             //yAxis.granularity = 0f
             //yAxis.gridColor = Color.WHITE
             //yAxis.labelCount = 4
             yAxis.setLabelCount(5,true)
-           // yAxis.granularity = 4f
+            // yAxis.granularity = 4f
             //yAxis.setDrawGridLines(true)
             //yAxis.setDrawAxisLine(true)
             //yAxis.axisLineColor = Color.WHITE
@@ -374,9 +292,9 @@ class CaloriesTrendFragment(today: Boolean) : Fragment() {
             val data = LineData(dataSets)
             mChart.data = data
         }
-
     }
-    private fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
+
+    override fun getMaxLabelCount(dataValues: ArrayList<Entry>): Int {
         var maxLabelCount = 0f
         for (data in dataValues) {
             if (data.y > maxLabelCount) {

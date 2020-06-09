@@ -7,7 +7,7 @@ import com.atos.mobilehealthcareagent.database.User
 interface RegistrationActivityInterface {
     interface RegistrationActivityInterfaceViewInterface {
         fun init()
-        fun checkuserGoalCreatedOrNot()
+        fun checkUserGoalCreatedOrNot()
         fun getSDKPermission()
     }
 

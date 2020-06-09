@@ -29,7 +29,7 @@ class RegistrationActivityPresenter :
     override fun init() {
         db = AppDatabase.getAppDatabase(context) as AppDatabase
         mRegistrationActivityInterfaceViewInterface.init()
-        mRegistrationActivityInterfaceViewInterface.checkuserGoalCreatedOrNot()
+        mRegistrationActivityInterfaceViewInterface.checkUserGoalCreatedOrNot()
     }
 
     override fun saveUser(user: User,goal:Long) {

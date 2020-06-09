@@ -4,30 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.atos.mobilehealthcareagent.contract.SetGoalActivityInterface
 import com.atos.mobilehealthcareagent.fitnessharedpreferences.GoalSharedPreferences
 import com.shawnlin.numberpicker.NumberPicker
 import kotlinx.android.synthetic.main.activity_set_goals.*
 
 
-class SetGoalsActivity : AppCompatActivity() {
+class SetGoalsActivity : AppCompatActivity() ,SetGoalActivityInterface.SetGoalActivityInterfaceViewInterface{
 
     var  data = arrayOfNulls<String>(3)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_goals)
+        initialSetup()
+        }
 
 
+    override fun initialSetup() {
 
         data[0] = (5 * 1000).toString()
         data[1] = (6 * 1000).toString()
         data[2] = (7 * 1000).toString()
-
-
-//        for (i in 6..8) {
-//            data[i - 1] = (i * 1000).toString()
-//        }
-
         val numberPicker = findViewById<NumberPicker>(R.id.numberPicker)
         numberPicker.minValue = 1
         numberPicker.maxValue = data.size
@@ -36,21 +33,23 @@ class SetGoalsActivity : AppCompatActivity() {
         numberPicker.value = 2
         numberPicker.wheelItemCount = 6
 
+//        for (i in 6..8) {
+//            data[i - 1] = (i * 1000).toString()
+//        }
+
         //Set the goal and pass back the values
         set_btn.setOnClickListener{
-           onPreviousActivity()
-            }
+            onPreviousActivity()
+        }
 
 
         btn_back_goal.setOnClickListener {
-           onPreviousActivity()
+            onPreviousActivity()
         }
 
-        }
+    }
 
-
-
-    fun onPreviousActivity(){
+    override fun onPreviousActivity(){
         val callingActivity = getIntent()?.getStringExtra("ClassFrom")
         if(callingActivity!=null && callingActivity?.equals("RegistrationActivity")!!) {
             val intent = Intent(this, RegistrationActivity::class.java)
